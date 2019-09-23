@@ -15,7 +15,7 @@
     ],
 	"autoload": {
         "psr-4": {
-            "zqs\\zqs-admin\\": "src/"
+            "zqs\\admin\\": "src/"
         },
 		"files": [
             "src/helper.php"
