@@ -5,6 +5,6 @@ class Test
 {
     public function __construct()
     {
-        echo 'it work';
+        echo 'it work ';
     }
 }
