@@ -13,4 +13,5 @@ Route::group($admin_path, function () {
 //无需验证的方法
 Route::group($admin_path, function () {
     Route::get('login', 'zqs\admin\controller\Login@index');
+    Route::post('login', 'zqs\admin\controller\Login@do_login');
 });

@@ -88,8 +88,13 @@ abstract class Admin
         if ($batch || $this->batchValidate) {
             $v->batch(true);
         }
-
-        return $v->failException(true)->check($data);
+        $result = $v->check($data);
+        if ($result){
+            return true;
+        }else {
+            return ['result'=>false,'msg'=>$v->getError()];
+        }
+        //return $v->failException(true)->check($data);
     }
     /**
      * 重写模板输出

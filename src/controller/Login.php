@@ -14,10 +14,9 @@ class Login extends Admin
     public function do_login()
     {
         $url = $this->request->get('url', 'index/index');
-        
-        if ($this->auth->isLogin()){
+        /* if ($this->auth->isLogin()){
             return redirect($url);
-        }
+        } */
         if ($this->request->isPost()){
             $username = $this->request->post('username');
             $password = $this->request->post('password');
@@ -45,10 +44,12 @@ class Login extends Admin
                 'verifycode.captcha' => '验证码不正确',
             ];
             $result = $this->validate($data, $rule,$msg);
-            if (!$result){
+            if ($result!==true){
+                
+                return 'xxx';
                 //$this->error($result->getError(), $url, ['token' => $this->request->token()]);
-                return;
             }
+            
             $result = $this->auth->login($username, $password, $keeplogin ? 7*86400 : 0);
             if ($result === true){
                 $this->success('登录成功', $url, ['url' => $url]);
