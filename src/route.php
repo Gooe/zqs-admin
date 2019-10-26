@@ -6,6 +6,7 @@ $admin_path = Config::get('admin.admin_path')?:'admin';
 Route::group($admin_path, function () {
     //Route::get('//', 'zqs\admin\controller\Index@index');
     Route::get('', 'zqs\admin\controller\Index@index');
+    Route::get('index', 'zqs\admin\controller\Index@index');
     Route::get('console', 'zqs\admin\controller\Index@console');
 })->middleware(\zqs\admin\middleware\Auth::class);
 

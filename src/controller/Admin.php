@@ -13,6 +13,7 @@ use think\View;
  */
 abstract class Admin
 {
+    use \qeq66\think\Jump;
     /**
      * Request实例
      * @var \think\Request

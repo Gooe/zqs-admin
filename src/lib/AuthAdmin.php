@@ -22,7 +22,7 @@ class AuthAdmin extends Auth
     
     public function login($username, $password, $keeptime = 0)
     {
-        $admin = Admin::get(['username' => $username]);
+        $admin = Admin::where('username',$username)->find();
         if (!$admin)
         {
             return false;

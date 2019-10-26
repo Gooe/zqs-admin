@@ -1,6 +1,8 @@
 <?php
 namespace zqs\admin\controller;
 
+use zqs\admin\facade\AuthAdmin;
+
 class Login extends Admin
 {
     public function index()
@@ -13,14 +15,14 @@ class Login extends Admin
      */
     public function do_login()
     {
-        $url = $this->request->get('url', 'index/index');
-        /* if ($this->auth->isLogin()){
+        $url = $this->request->get('url', 'admin/index');
+        if (AuthAdmin::is_login()){
             return redirect($url);
-        } */
+        }
         if ($this->request->isPost()){
             $username = $this->request->post('username');
             $password = $this->request->post('password');
-            $verifycode = $this->request->post('verifycode');
+            $verifycode = $this->request->post('vercode');
             $keeplogin = $this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
@@ -43,24 +45,22 @@ class Login extends Admin
                 'verifycode.require' => '请输入验证码',
                 'verifycode.captcha' => '验证码不正确',
             ];
+            
             $result = $this->validate($data, $rule,$msg);
             if ($result!==true){
-                
-                return 'xxx';
-                //$this->error($result->getError(), $url, ['token' => $this->request->token()]);
+                $this->error($result['msg'], $url, ['token' => token()]);
             }
-            
-            $result = $this->auth->login($username, $password, $keeplogin ? 7*86400 : 0);
+            $result = AuthAdmin::login($username, $password, $keeplogin ? 7*86400 : 0);
             if ($result === true){
                 $this->success('登录成功', $url, ['url' => $url]);
                 return;
             }else{
-                $this->error('登录或密码错误', $url, ['token' => $this->request->token()]);
+                $this->error('登录或密码错误', $url, ['token' => token()]);
             }
             return;
         }
         // 根据客户端的cookie,判断是否可以自动登录
-        if ($this->auth->autologin()){
+        if (AuthAdmin::autologin()){
             $this->redirect($url);
         }
         $this->view->assign('title', '管理登录');

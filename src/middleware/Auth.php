@@ -7,11 +7,9 @@ class Auth
 {
     public function handle($request, \Closure $next)
     {
+        //是否登录
         $check = AuthAdmin::is_login();
-        
         if (! $check) {
-            //session('error_msg', '请先登录系统');
-            
             return redirect(url('admin/login'));
         }
         
