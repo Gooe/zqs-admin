@@ -3,6 +3,7 @@
 namespace zqs\admin\lib;
 
 use zqs\admin\model\Admin;
+use zqs\admin\model\AuthRule;
 
 class AuthAdmin extends Auth
 {
@@ -230,7 +231,7 @@ class AuthAdmin extends Auth
         // 读取管理员当前拥有的权限节点
         $userRule = $this->getRuleList();
         // 必须将结果集转换为数组
-        $ruleList = model('AuthRule')->where('ismenu', 1)->field('id,name,pid,title,icon')->order('weigh', 'desc')->cache("__menu__")->select()->toArray();
+        $ruleList = AuthRule::where('ismenu', 1)->field('id,name,pid,title,icon')->order('weigh', 'desc')->cache("__menu__")->select()->toArray();
         
         foreach ($ruleList as $k => &$v)
         {
