@@ -1,0 +1,274 @@
+{extend name="../builder/layout"}
+{block name="style"}
+<!-- 其它css -->
+{notempty name="css_list"}
+{volist name="css_list" id="vo"}
+<link rel="stylesheet" href="{$vo}">
+{/volist}
+{/notempty}
+<!-- 其它js -->
+{notempty name="js_list"}
+{volist name="js_list" id="vo"}
+<script src="{$vo}"></script>
+{/volist}
+{/notempty}
+<style type="text/css">
+  .layui-form-select dl dd{text-align: left;}
+  /*.layui-layer-admin .layui-layer-content{padding: 0;}*/
+  #LAY-system-view-popup{padding: 0;}
+</style>
+{/block}
+{block name="body"}
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <!-- 提醒文字 -->
+      {notempty name="page_tips"}
+      <div class="layui-card-body">
+        <blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
+      </div>
+      {/notempty}
+      <!-- 搜索区域 -->
+      {notempty name="search"}
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="text-align: right;padding: 10px 0;">
+        <div class="layui-form-item">
+          {volist name="search" id="vo"}
+          {eq name="vo.item" value="input"}
+          <div class="layui-inline">
+            <label class="layui-form-label">{$vo.name}</label>
+            <div class="layui-input-block">
+              <input type="{$vo.type}" name="{$vo.field}" placeholder="{$vo.placeholder}" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          {/eq}
+          {eq name="vo.item" value="select"}
+          <div class="layui-inline">
+            <label class="layui-form-label">{$vo.name}</label>
+            <div class="layui-input-block">
+              <select name="{$vo.field}">
+                {volist name="vo.extra" id="opt"}<option value="{$key}">{$opt}</option>{/volist}
+              </select>
+            </div>
+          </div>
+          {/eq}
+          {/volist}
+          
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-zqs-admin-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      {/notempty}
+      
+      <div class="layui-card-body">
+        <!-- 顶部按钮 -->
+        {notempty name="top_btns"}
+        <div style="padding-bottom: 10px;">
+          {volist name="top_btns" id="vo"}
+          <button class="layui-btn layuiadmin-btn-admin {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
+          {/volist}
+        </div>
+        {/notempty}
+        
+        <table id="LAY-zqs-admin-table" lay-filter="LAY-zqs-admin-table"></table>  
+
+
+        
+      </div>
+    </div>
+  </div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+  layui.extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index','table'], function(){
+    var $ = layui.$
+    ,form = layui.form
+    ,table = layui.table
+    ,admin = layui.admin;
+    //加载数据
+    table.render({
+      elem: '#LAY-zqs-admin-table'
+      ,url: '{$data_url}' //数据接口
+      ,parseData: function(res){ //res 即为原始返回的数据
+        return {
+          "code": res.code, //解析接口状态
+          "msg": res.msg, //解析提示文本
+          "count": res.data.total, //解析数据长度
+          "data": res.data.data //解析数据列表
+        };
+      }
+      ,response: {
+        statusCode: 1 //规定成功的状态码，默认：0
+        ,countName: 'count' //规定数据总数的字段名称，默认：count
+        ,dataName: 'data' //规定数据列表的字段名称，默认：data
+      }
+      ,page: {$page.open}
+      ,limit: {$page.limit}
+      ,limits:{$page.limits}
+      ,height: '{$height}'
+      ,cols: [[
+        {notempty name="cols"}
+          {volist name="cols" id="vo"}
+          {
+            {volist name="vo" id="v1" key="k"}
+              {$key}:{if strpos($v1,'function') !== false }{$v1|raw}{elseif is_numeric($v1) /}{$v1}{else/}'{$v1|raw}'{/if},
+            {/volist}
+          },
+          {/volist}
+        {/notempty}
+      ]]
+      ,text: {
+        none:'什么都没有'
+      }
+    });
+
+    //监听搜索
+    form.on('submit(LAY-zqs-admin-search)', function(data){
+      var field = data.field;
+      //console.log(data)
+      //执行重载
+      table.reload('LAY-zqs-admin-table', {
+        where: {filter:field}
+      });
+    });
+
+    //监听工具条
+    table.on('tool(LAY-zqs-admin-table)', function(obj){
+      var data = obj.data;
+      var url = $(this).data('url');
+      var that = this;
+      //ajax请求
+      if(obj.event === 'ajax-get'){
+        var method = $(this).data('method')||'get';
+        if ($(this).hasClass('confirm')) {
+          layer.confirm('确定要这么操作？',{title:"提示"}, function(index){
+            //console.log(obj)
+            layer.close(index);
+            admin.req({
+              url: url
+              ,data: {ids:data.id}
+              ,type:method
+              ,success: function(res){
+                if (res.code==1) {
+                  layer.msg(res.msg);
+                  if ($(that).hasClass('delete')) {
+                    obj.del();
+                  }
+                  if ($(that).hasClass('reload')) {
+                    table.reload('LAY-zqs-admin-table'); //数据刷新
+                  }
+                }else{
+                  //layer.msg(res.msg,{icon:2});
+                }
+                
+              }
+            });
+          });
+        }else{
+          admin.req({
+            url: url
+            ,data: {ids:data.id}
+            ,type:method
+            ,success: function(res){
+              if (res.code==1) {
+                if ($(that).hasClass('delete')) {
+                  obj.del();
+                }
+                if ($(that).hasClass('reload')) {
+                  table.reload('LAY-zqs-admin-table'); //数据刷新
+                }
+              }else{
+                //layer.msg(res.msg,{icon:2});
+              }
+              
+            }
+          });
+        }
+        
+      }else if(obj.event === 'edit'){
+        var tr = $(obj.tr);
+        admin.popup({
+          type: 2
+          ,title: '编辑'
+          ,content: url+'?id='+data.id
+          ,area: [$(this).data('w'), $(this).data('h')]
+          
+        })
+      }
+    });
+
+    
+    //顶部按钮操作
+    $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+      var url = $(this).data('url');
+      if ($(this).hasClass('ajax-get')) {
+        var checkStatus = table.checkStatus('LAY-zqs-admin-table')
+        ,checkData = checkStatus.data; //得到选中的数据
+        //console.log(checkData)
+        if(checkData.length === 0){
+          return layer.msg('请选择数据');
+        }
+        var ids = [];
+        $(checkData).each(function(k,v){
+          ids.push(v['id']);
+        });
+
+        var method = $(this).data('method')||'post'
+        if ($(this).hasClass('confirm')) {
+          layer.confirm('确定要这么操作？',{title:"提示"}, function(index){
+            //console.log(obj)
+            layer.close(index);
+            admin.req({
+              url: url
+              ,data: {'ids[]':ids}
+              ,type:method
+              ,success: function(res){
+                if (res.code==1) {
+                  layer.msg(res.msg);
+                  table.reload('LAY-zqs-admin-table')
+                }else{
+                  //layer.msg(res.msg,{icon:2});
+                }
+                
+              }
+            });
+          });
+        }else{
+          admin.req({
+            url: url
+            ,data: {'ids[]':ids}
+            ,type:method
+            ,success: function(res){
+              if (res.code==1) {
+                layer.msg(res.msg);
+                table.reload('LAY-zqs-admin-table')
+              }else{
+                //layer.msg(res.msg,{icon:2});
+              }
+              
+            }
+          });
+        }
+
+      }else if($(this).hasClass('iframe')){
+        admin.popup({
+          type: 2
+          ,title: $(this).text()
+          ,content: url
+          ,area: [$(this).data('w'), $(this).data('h')]
+          
+        })
+      }
+
+    });
+
+  });
+  </script>
+{/block}
+
+
+
+

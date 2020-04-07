@@ -1,0 +1,187 @@
+{extend name="../builder/layout"}
+{block name="style"}
+<style type="text/css">
+	.layui-iconpicker-body{width: 324px;}
+</style>
+{/block}
+{block name="body"}
+<div class="layui-fluid">
+    <div class="layui-card">
+    	<!-- 提醒文字 -->
+		{notempty name="page_tips"}
+		<div class="layui-card-body">
+			<blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
+		</div>
+		{/notempty}
+		<!-- 标题 -->
+		{notempty name="form_title"}
+		<div class="layui-card-header">{$form_title}</div>
+		{/notempty}
+        <div class="layui-card-body" style="padding: 15px;">
+        <form class="layui-form" action="" lay-filter="form">
+        	<div class="layui-form-item">
+		        <label class="layui-form-label">角色名称</label>
+		        <div class="layui-input-inline">
+		            <input class="layui-input" type="text" name="row[name]" lay-verify="required" placeholder="请输入角色名称" />
+		        </div>
+		    </div>
+		    <div class="layui-form-item">
+			    <label class="layui-form-label">父级角色</label>
+			    <div class="layui-input-block">
+			      <select name="row[pid]" lay-filter="parent" lay-verify="required" >
+			        <option value="">请选择他的爸爸，如果你不知道孩子父亲是谁，就选超级管理员...</option>
+				    {volist name="groupdata" id="vo"}
+				    <option value="{$key}">{$vo||raw}</option>
+				    {/volist}
+			      </select>
+			    </div>
+			</div>
+		    <div class="layui-form-item">
+		        <label class="layui-form-label">选择权限</label>
+		        <div class="layui-input-block">
+		            <div id="LAY-auth-tree-index"></div>
+		        </div>
+		    </div>
+        	
+
+
+         	<div class="layui-form-item layui-layout-admin">
+	            <div class="layui-input-block">
+	              <div class="layui-footer" style="left: 0;">
+	                <button class="layui-btn" lay-submit="" lay-filter="form">立即提交</button>
+	                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	              </div>
+	            </div>
+	        </div>
+
+        </form>
+      </div>
+    </div>
+</div>
+
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	layui.extend({
+		index: 'lib/index' //主入口模块
+	}).use(['index','form','authtree'], function(){
+		var $ = layui.$
+		,admin = layui.admin
+		,form = layui.form
+		,authtree = layui.authtree;
+		
+		//间距
+		var popup_index = parent.layer.getFrameIndex(window.name);//先得到当前iframe层的索引
+		if (popup_index) {
+			$('.layui-fluid').css('padding',0);
+			$('html').css('background','#fff');
+		}
+		/* 监听提交 */
+	    form.on('submit(form)', function(data){
+	    	var url = "{$data_url|default=''}";
+	    	var post_data = data.field;
+		    admin.req({
+              	url: url
+              	,data: post_data
+              	,type:'post'
+                ,success: function(res){
+	                if (res.code==1) {
+		                parent.layer.msg(res.msg);
+		                if(popup_index){
+							parent.layer.close(popup_index); //关闭  
+		                	parent.layui.table.reload('LAY-zqs-admin-table');
+		                }
+	                }else{
+	                  //layer.msg(res.msg,{icon:2});
+	                }
+                
+                }
+            });
+
+	     	return false;
+	    });
+	    //编辑赋值
+	    {notempty name="edit"}
+	    {eq name='edit' value="1"}
+	    	form.val('form',{
+	    		"row[name]":"{$row.name}",
+	    		"row[pid]":"{$row.pid}"
+	    	})
+		    get_tree({$row.id},{$row.pid});
+		{/eq}
+		{/notempty}
+	    //获取权限
+	    form.on('select(parent)',function(data){
+			var pid = '';
+	        var id = '';
+	        {notempty name="row"} 
+	        id={$row.id}; pid={$row.pid}; 
+	        {/notempty}
+	        if (data.value == id) {
+	            $("option[value='" + pid + "']", this).prop("selected", true).change();
+	            layer.msg('Can not change the parent to self',{icon:2});
+	            return false;
+	        }
+	        get_tree(id,data.value);
+		});
+		//get tree
+		function get_tree(id,pid){
+		    $.ajax({
+		            url: "roletree",
+		            type: 'post',
+		            dataType: 'json',
+		            data: {id: id, pid: pid},
+		            success: function (ret) {
+		                if (ret.hasOwnProperty("code")) {
+		                    var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : "";
+		                    if (ret.code === 1) {
+		                        //var trees = ret.data.list;
+					            // 如果后台返回的不是树结构，请使用 authtree.listConvert 转换
+					            var trees = authtree.listConvert(ret.data, {
+								    primaryKey: 'id'
+								    ,startPid: 0
+								    ,parentKey: 'pid'
+								    ,nameKey: 'name'
+								    ,valueKey: 'id'
+								    //,checkedKey: ret.data.checkedId
+								});
+					            authtree.render('#LAY-auth-tree-index', trees, {
+									inputname: 'row[rule_ids][]', 
+									layfilter: 'lay-check-auth', 
+									autowidth: true,
+									theme: 'auth-skin-default',
+									themePath: '/static/layuiadmin/modules/authtree_themes/' // 主题路径，默认 layui_exts/tree_themes/
+								});
+		                    } else {
+		                        layer.msg(ret.msg,{icon:2});
+		                    }
+		                }
+		            }, error: function (e) {
+		                layer.msg(e.message,{icon:2});
+		            }
+		        });
+		  }
+
+	    //赋值
+	    {notempty name="info"}
+	    form.val('form',{:json_encode($info)});
+	    {/notempty}
+
+		//标题
+		{notempty name="page_title"}
+		parent.layer.title('{$page_title}')
+		{/notempty}
+
+		//modules js
+		{notempty name="layui_modules_js"}
+		{volist name="layui_modules_js" id="vo"}
+		{$vo|raw}
+		{/volist}
+		{/notempty}
+
+		
+	})
+</script>
+
+{/block}

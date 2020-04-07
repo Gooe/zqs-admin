@@ -10,7 +10,7 @@ class Auth
         //是否登录
         $check = AuthAdmin::is_login();
         if (! $check) {
-            return redirect(url('admin/login'));
+            return redirect(url('/'.get_admin_name().'/login'));
         }
         
         return $next($request);

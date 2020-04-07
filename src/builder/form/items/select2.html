@@ -1,0 +1,17 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">{$vo.title|raw|default=""}</label>
+    <div class="{notempty name='vo.help'}layui-input-inline{else/}layui-input-block{/notempty}" style="{$vo.extra_css|raw|default=''}"  >
+      	<div id="{$vo.name}" class="xm-select-demo"></div>
+    </div>
+    {// 辅助文字}
+    {notempty name="vo.help"}
+    <div class="layui-form-mid layui-word-aux">{$vo.help}</div>
+    {/notempty}
+</div>
+<script type="text/javascript">
+var xms_{$vo.name} = xmSelect.render({
+	el: '#{$vo.name}', 
+	name: "{$vo.name}",
+	data: {:json_encode($vo.options)}
+})
+</script>

@@ -96,65 +96,54 @@ class Auth
      */
     public function check($name, $uid, $relation = 'or', $mode = 'url')
     {
-        if (!$this->config['auth_on'])
-        {
+        if (!$this->config['auth_on']){
             return true;
         }
         // 获取用户需要验证的所有有效规则列表
         $rulelist = $this->getRuleList($uid);
-        if (in_array('*', $rulelist))
+        if (in_array('*', $rulelist)){
             return true;
-            
-            if (is_string($name))
+        }
+        if (is_string($name)){
+            $name = strtolower($name);
+            if (strpos($name, ',') !== false)
             {
-                $name = strtolower($name);
-                if (strpos($name, ',') !== false)
-                {
-                    $name = explode(',', $name);
-                }
-                else
-                {
-                    $name = [$name];
-                }
+                $name = explode(',', $name);
             }
-            $list = []; //保存验证通过的规则名
-            if ('url' == $mode)
+            else
             {
-                $REQUEST = unserialize(strtolower(serialize($this->request->param())));
+                $name = [$name];
             }
-            foreach ($rulelist as $rule)
-            {
-                $query = preg_replace('/^.+\?/U', '', $rule);
-                if ('url' == $mode && $query != $rule)
-                {
-                    parse_str($query, $param); //解析规则中的param
-                    $intersect = array_intersect_assoc($REQUEST, $param);
-                    $rule = preg_replace('/\?.*$/U', '', $rule);
-                    if (in_array($rule, $name) && $intersect == $param)
-                    {
-                        //如果节点相符且url参数满足
-                        $list[] = $rule;
-                    }
+        }
+        $list = []; //保存验证通过的规则名
+        if ('url' == $mode){
+            $REQUEST = unserialize(strtolower(serialize($this->request->param())));
+        }
+        foreach ($rulelist as $rule){
+            $query = preg_replace('/^.+\?/U', '', $rule);
+            if ('url' == $mode && $query != $rule){
+                parse_str($query, $param); //解析规则中的param
+                $intersect = array_intersect_assoc($REQUEST, $param);
+                $rule = preg_replace('/\?.*$/U', '', $rule);
+                if (in_array($rule, $name) && $intersect == $param){
+                    //如果节点相符且url参数满足
+                    $list[] = $rule;
                 }
-                else
-                {
-                    if (in_array($rule, $name))
-                    {
-                        $list[] = $rule;
-                    }
+            }else{
+                if (in_array($rule, $name)){
+                    $list[] = $rule;
                 }
             }
-            if ('or' == $relation && !empty($list))
-            {
-                return true;
-            }
-            $diff = array_diff($name, $list);
-            if ('and' == $relation && empty($diff))
-            {
-                return true;
-            }
-            
-            return false;
+        }
+        if ('or' == $relation && !empty($list)){
+            return true;
+        }
+        $diff = array_diff($name, $list);
+        if ('and' == $relation && empty($diff)){
+            return true;
+        }
+        
+        return false;
     }
     
     /**
@@ -180,7 +169,7 @@ class Auth
         //->where($auth_group_access.'.uid',$uid)
         //->where($auth_group.'.status',1)
         ->where("{$auth_group_access}.uid='{$uid}' and {$auth_group}.status=1")
-        ->select();
+        ->select()->toArray();
         $groups[$uid] = $user_groups ?: [];
         
         return $groups[$uid];

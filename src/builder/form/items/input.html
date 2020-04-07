@@ -1,0 +1,10 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">{$vo.title|raw}</label>
+    <div class="{notempty name='vo.help'}layui-input-inline{else/}layui-input-block{/notempty}" style="{$vo.extra_css|raw|default=''}"  >
+      <input type="{$vo.type}" name="{$vo.name}" value="{$vo.value|raw|default=''}" lay-verify="{$vo.verify|default=''}" autocomplete="off" placeholder="{$vo.placeholder|raw|default='请输入'}" class="layui-input" {$vo.extra_attr|raw|default=''}>
+    </div>
+    {// 辅助文字}
+    {notempty name="vo.help"}
+    <div class="layui-form-mid layui-word-aux">{$vo.help}</div>
+    {/notempty}
+</div>

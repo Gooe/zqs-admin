@@ -1,0 +1,6 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">{$vo.title|raw}</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="{$vo.name}" value="{$vo.value|default=''}" lay-skin="switch" lay-filter="{$vo.name}" lay-text="{$vo.text|default='ON/OFF'}" {$vo.checked}>
+    </div>
+</div>

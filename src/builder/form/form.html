@@ -1,0 +1,137 @@
+{extend name="../builder/layout"}
+{block name="style"}
+<!-- 其它css -->
+{notempty name="css_list"}
+{volist name="css_list" id="vo"}
+<link rel="stylesheet" href="{$vo}">
+{/volist}
+{/notempty}
+<!-- 其它js -->
+{notempty name="js_list"}
+{volist name="js_list" id="vo"}
+<script src="{$vo}"></script>
+{/volist}
+{/notempty}
+<style type="text/css">
+	.layui-iconpicker-body{width: 324px;}
+</style>
+{/block}
+{block name="body"}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+    	<!-- 提醒文字 -->
+		{notempty name="page_tips"}
+		<div class="layui-card-body">
+			<blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
+		</div>
+		{/notempty}
+		<!-- 标题 -->
+		{notempty name="form_title"}
+		<div class="layui-card-header">{$form_title}</div>
+		{/notempty}
+        <div class="layui-card-body" style="padding: 15px;">
+        <form class="layui-form" action="" lay-filter="form">
+        	{volist name="form_items" id="vo" empty="什么都没有"}
+	        	{switch name="vo.item"}
+	        		{case input}
+	        			{include file="form/items/input"}
+	        		{/case}
+	        		{case select}
+	        			{include file="form/items/select"}
+	        		{/case}
+	        		{case select2}
+	        			{include file="form/items/select2"}
+	        		{/case}
+	        		{case switch}
+	        			{include file="form/items/switch"}
+	        		{/case}
+	        		{case icon}
+	        			{include file="form/items/icon"}
+	        		{/case}
+
+	        	{/switch}
+        	{/volist}
+
+
+         	<div class="layui-form-item layui-layout-admin">
+	            <div class="layui-input-block">
+	              <div class="layui-footer" style="left: 0;">
+	              	<input type="hidden" name="id" value="{$info.id|default=''}">
+	                <button class="layui-btn" lay-submit="" lay-filter="form">立即提交</button>
+	                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	              </div>
+	            </div>
+	        </div>
+
+        </form>
+      </div>
+    </div>
+</div>
+
+{/block}
+
+{block name="script"}
+
+<script type="text/javascript">
+	layui.extend({
+		index: 'lib/index' //主入口模块
+	}).use({:json_encode($layui_modules)}, function(){
+		var $ = layui.$
+		,admin = layui.admin;
+		{volist name="layui_modules" id="vo"}
+		var {$vo} = layui.{$vo};
+		{/volist}
+		//间距
+		var popup_index = parent.layer.getFrameIndex(window.name);//先得到当前iframe层的索引
+		if (popup_index) {
+			$('.layui-fluid').css('padding',0);
+			$('html').css('background','#fff');
+		}
+		/* 监听提交 */
+	    form.on('submit(form)', function(data){
+	    	var url = "{$data_url|default=''}";
+	    	var post_data = data.field;
+		    admin.req({
+              	url: url
+              	,data: post_data
+              	,type:'post'
+                ,success: function(res){
+	                if (res.code==1) {
+		                parent.layer.msg(res.msg);
+		                if(popup_index){
+							parent.layer.close(popup_index); //关闭  
+		                	parent.layui.table.reload('LAY-zqs-admin-table');
+		                }
+	                }else{
+	                  //layer.msg(res.msg,{icon:2});
+	                }
+                
+                }
+            });
+
+	     	return false;
+	    });
+
+	    //赋值
+	    {notempty name="info"}
+	    form.val('form',{:json_encode($info)});
+	    {/notempty}
+
+		//标题
+		{notempty name="page_title"}
+		parent.layer.title('{$page_title}')
+		{/notempty}
+
+		//modules js
+		{notempty name="layui_modules_js"}
+		{volist name="layui_modules_js" id="vo"}
+		{$vo|raw}
+		{/volist}
+		{/notempty}
+
+		
+	})
+</script>
+
+{/block}

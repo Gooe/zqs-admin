@@ -5,9 +5,23 @@ use zqs\admin\facade\AuthAdmin;
 
 class Login extends Admin
 {
+    protected $noNeedLogin = ['*'];
     public function index()
     {
         
+        $url = $this->request->get('url', '/'.get_admin_name().'/index');
+        
+        // 根据客户端的cookie,判断是否可以自动登录
+        if (AuthAdmin::autologin()){
+            return redirect($url);
+        }
+        //已经登录
+        if (AuthAdmin::is_login()){
+            return redirect($url);
+        }
+        
+        
+        $this->assign('title', '管理登录');
         return $this->fetch('login');
     }
     /**
@@ -15,10 +29,7 @@ class Login extends Admin
      */
     public function do_login()
     {
-        $url = $this->request->get('url', 'admin/index');
-        if (AuthAdmin::is_login()){
-            return redirect($url);
-        }
+        $url = $this->request->get('url', '/'.get_admin_name().'/index');
         if ($this->request->isPost()){
             $username = $this->request->post('username');
             $password = $this->request->post('password');
@@ -59,11 +70,6 @@ class Login extends Admin
             }
             return;
         }
-        // 根据客户端的cookie,判断是否可以自动登录
-        if (AuthAdmin::autologin()){
-            $this->redirect($url);
-        }
-        $this->view->assign('title', '管理登录');
-        return $this->view->fetch();
+        
     }
 }

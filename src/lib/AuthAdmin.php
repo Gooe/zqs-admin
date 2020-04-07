@@ -73,7 +73,7 @@ class AuthAdmin extends Auth
         list($id, $keeptime, $expiretime, $key) = explode('|', $keeplogin);
         if ($id && $keeptime && $expiretime && $key && $expiretime > time())
         {
-            $admin = Admin::get($id);
+            $admin = Admin::find($id);
             if (!$admin)
             {
                 return false;
@@ -112,11 +112,15 @@ class AuthAdmin extends Auth
         return false;
     }
     
-    public function check($name, $uid = '',$type = 1 ,$mode = 'url', $relation = 'or')
+    /**
+     * 检查权限
+     * {@inheritDoc}
+     * @see \zqs\admin\lib\Auth::check()
+     */
+    public function check($name, $uid = '', $relation = 'or', $mode = 'url')
     {
-        return parent::check($name, $this->uid, $type, $mode,$relation);
+        return parent::check($name, $this->uid, $relation, $mode);
     }
-    
     /**
      * 检测当前控制器和方法是否匹配传递的数组
      *
@@ -126,18 +130,16 @@ class AuthAdmin extends Auth
     {
         $request = request();
         $arr = is_array($arr) ? $arr : explode(',', $arr);
-        if (!$arr)
-        {
-            return FALSE;
+        if (!$arr){
+            return false;
         }
         // 是否存在
-        if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr))
-        {
-            return TRUE;
+        if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr)){
+            return true;
         }
         
         // 没找到匹配
-        return FALSE;
+        return false;
     }
     
     /**
