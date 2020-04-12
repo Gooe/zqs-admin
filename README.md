@@ -1,4 +1,4 @@
-# zqs-admin 通用管理后台
+# zqs-admin 通用管理后台-
 服务端：基于最新版tp6，前端：layuiadmin
 layuiadmin为收费版，这里没有上传，请购买后放于项目public/static目录
 # 安装
@@ -69,3 +69,13 @@ return Builder::make('table')
                 ->setPage(['open'=>'false'])
                 ->fetch();
 ```
+# Demo
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/1.png)
+
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/2.png)
+
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/3.png)
+
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/4.png)
+
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/1.png)
