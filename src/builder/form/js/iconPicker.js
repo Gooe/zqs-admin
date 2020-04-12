@@ -1,7 +1,7 @@
 //图标控件
 iconPicker.render({
     // 选择器，推荐使用input
-    elem: '.iconPicker',
+    elem: '#{$name|default="iconPicker"}',
     // 数据类型：fontClass/unicode，推荐使用fontClass
     type: 'fontClass',
     // 是否开启搜索：true/false，默认true

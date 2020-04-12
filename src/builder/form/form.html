@@ -6,12 +6,6 @@
 <link rel="stylesheet" href="{$vo}">
 {/volist}
 {/notempty}
-<!-- 其它js -->
-{notempty name="js_list"}
-{volist name="js_list" id="vo"}
-<script src="{$vo}"></script>
-{/volist}
-{/notempty}
 <style type="text/css">
 	.layui-iconpicker-body{width: 324px;}
 </style>
@@ -20,6 +14,21 @@
 
 <div class="layui-fluid">
     <div class="layui-card">
+    	<!-- 选项卡 -->
+	    {notempty name="tab_nav"}
+	    <div class="layui-card-body" style="padding-left: 0;">
+	        <div class="layui-tab layui-tab-brief">
+	          <ul class="layui-tab-title">
+	            {volist name="tab_nav['tab_list']" id="tab"}
+	            <li {eq name="tab_nav.curr_tab" value="$key"}class="layui-this"{/eq}>
+	              <a href="{$tab.url}{$_pop ?= '?_pop=1'}">{$tab.title|htmlspecialchars}</a>
+	            </li>
+	            {/volist}
+	          </ul>
+	        </div>
+	      </div>
+	    {/notempty}
+	    
     	<!-- 提醒文字 -->
 		{notempty name="page_tips"}
 		<div class="layui-card-body">
@@ -49,7 +58,15 @@
 	        		{case icon}
 	        			{include file="form/items/icon"}
 	        		{/case}
-
+	        		{case upload_image}
+	        			{include file="form/items/upload_image"}
+	        		{/case}
+	        		{case radio}
+	        			{include file="form/items/radio"}
+	        		{/case}
+	        		{case textarea}
+	        			{include file="form/items/textarea"}
+	        		{/case}
 	        	{/switch}
         	{/volist}
 
@@ -58,7 +75,7 @@
 	            <div class="layui-input-block">
 	              <div class="layui-footer" style="left: 0;">
 	              	<input type="hidden" name="id" value="{$info.id|default=''}">
-	                <button class="layui-btn" lay-submit="" lay-filter="form">立即提交</button>
+	                <button class="layui-btn layuiadmin-btn-admin" lay-submit="" lay-filter="form">立即提交</button>
 	                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 	              </div>
 	            </div>
@@ -72,7 +89,12 @@
 {/block}
 
 {block name="script"}
-
+<!-- 其它js -->
+{notempty name="js_list"}
+{volist name="js_list" id="vo"}
+<script src="{$vo}"></script>
+{/volist}
+{/notempty}
 <script type="text/javascript">
 	layui.extend({
 		index: 'lib/index' //主入口模块
@@ -115,7 +137,15 @@
 
 	    //赋值
 	    {notempty name="info"}
+	    {empty name="value_fields"}
 	    form.val('form',{:json_encode($info)});
+	    {else/}
+	    form.val('form',{
+	    	{volist name=":str2arr($value_fields)" id="vo"}
+	    	"{$vo}":"{$info->$vo}",
+	    	{/volist}
+	    })
+	    {/empty}
 	    {/notempty}
 
 		//标题
@@ -126,7 +156,7 @@
 		//modules js
 		{notempty name="layui_modules_js"}
 		{volist name="layui_modules_js" id="vo"}
-		{$vo|raw}
+		{$vo.content|raw}
 		{/volist}
 		{/notempty}
 

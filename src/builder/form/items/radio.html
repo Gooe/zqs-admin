@@ -1,12 +1,9 @@
 <div class="layui-form-item">
     <label class="layui-form-label">{$vo.title|raw|default=""}</label>
     <div class="{notempty name='vo.help'}layui-input-inline{else/}layui-input-block{/notempty}" style="{$vo.extra_css|raw|default=''}" >
-      <select name="{$vo.name}"  lay-filter="{$vo.name}"  lay-verify="{$vo.verify|default=''}"  {$vo.extra_attr|raw|default=''}  >
-        <option value="">{$vo.placeholder}</option>
-        {volist name="vo.options" id="option"}
-        <option value="{$key}" {if ((string)$vo.value == (string)$key)}selected{/if}>{$option|raw}</option>
-        {/volist}
-      </select>
+      {volist name="vo.options" id="radio"}
+      <input type="radio" name="{$vo.name}" value="{$key}" title="{$radio}" {eq name="key" value="$vo.value"}checked {/eq}  {if isset($vo['extra_attr'][$key])} {$vo['extra_attr'][$key]}{/if}>
+      {/volist}
     </div>
     {// 辅助文字}
     {notempty name="vo.help"}

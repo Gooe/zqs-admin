@@ -47,7 +47,7 @@ class AuthAdmin extends Auth
      */
     public function logout()
     {
-        $admin = Admin::get(intval($this->uid));
+        $admin = Admin::find(intval($this->uid));
         if (!$admin)
         {
             return true;

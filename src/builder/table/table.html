@@ -6,12 +6,6 @@
 <link rel="stylesheet" href="{$vo}">
 {/volist}
 {/notempty}
-<!-- 其它js -->
-{notempty name="js_list"}
-{volist name="js_list" id="vo"}
-<script src="{$vo}"></script>
-{/volist}
-{/notempty}
 <style type="text/css">
   .layui-form-select dl dd{text-align: left;}
   /*.layui-layer-admin .layui-layer-content{padding: 0;}*/
@@ -21,12 +15,29 @@
 {block name="body"}
   <div class="layui-fluid">
     <div class="layui-card">
+
+      <!-- 选项卡 -->
+      {notempty name="tab_nav"}
+      <div class="layui-card-body" style="padding-left: 0;">
+        <div class="layui-tab layui-tab-brief">
+          <ul class="layui-tab-title">
+            {volist name="tab_nav['tab_list']" id="tab"}
+            <li {eq name="tab_nav.curr_tab" value="$key"}class="layui-this"{/eq}>
+              <a href="{$tab.url}{$_pop ?= '?_pop=1'}">{$tab.title|htmlspecialchars}</a>
+            </li>
+            {/volist}
+          </ul>
+        </div>
+      </div>
+      {/notempty}
+
       <!-- 提醒文字 -->
       {notempty name="page_tips"}
       <div class="layui-card-body">
         <blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
       </div>
       {/notempty}
+      
       <!-- 搜索区域 -->
       {notempty name="search"}
       <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="text-align: right;padding: 10px 0;">
@@ -66,20 +77,25 @@
         {notempty name="top_btns"}
         <div style="padding-bottom: 10px;">
           {volist name="top_btns" id="vo"}
-          <button class="layui-btn layuiadmin-btn-admin {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
+          <button class="layui-btn topbtn {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
           {/volist}
         </div>
         {/notempty}
         
         <table id="LAY-zqs-admin-table" lay-filter="LAY-zqs-admin-table"></table>  
 
-
-        
       </div>
+
     </div>
   </div>
 {/block}
 {block name="script"}
+<!-- 其它js -->
+{notempty name="js_list"}
+{volist name="js_list" id="vo"}
+<script src="{$vo}"></script>
+{/volist}
+{/notempty}
 <script type="text/javascript">
   layui.extend({
     index: 'lib/index' //主入口模块
@@ -202,7 +218,7 @@
 
     
     //顶部按钮操作
-    $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    $('.layui-btn.topbtn').on('click', function(){
       var url = $(this).data('url');
       if ($(this).hasClass('ajax-get')) {
         var checkStatus = table.checkStatus('LAY-zqs-admin-table')

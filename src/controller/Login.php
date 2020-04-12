@@ -72,4 +72,31 @@ class Login extends Admin
         }
         
     }
+    
+    /**
+     * 注销登录
+     */
+    public function logout()
+    {
+        $this->auth->logout();
+        return $this->redirect('/'.get_admin_name().'/login');
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

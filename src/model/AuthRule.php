@@ -9,10 +9,10 @@ class AuthRule extends Model
 {
     public static function onBeforeUpdate($menu)
     {
-        $ismenu = input('ismenu');
+        /* $ismenu = input('ismenu');
         if (empty($ismenu)){
             $menu->ismenu = 0;
-        }
+        } */
     }
     public static function onAfterUpdate($menu)
     {

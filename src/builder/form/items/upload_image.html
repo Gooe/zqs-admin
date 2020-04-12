@@ -1,0 +1,22 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">{$vo.title|raw|default=""}</label>
+    <div class="layui-input-inline">
+      	<div class="layui-upload-drag" id="upload_img_{$vo.name}">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
+            {gt name="vo.value" value="0"}
+            <div class="view" id="upload_img_view_{$vo.name}">
+			    <hr>
+			    <input type="hidden" name="{$vo.name}" value="{$vo.value}">
+			    <img src="{$vo.value|get_file_path}" style="max-width: 150px;max-height: 100px;">
+			</div>
+            {else/}
+            <div class="layui-hide view" id="upload_img_view_{$vo.name}">
+			    <hr>
+			    <input type="hidden" name="{$vo.name}" value="0">
+			    <img src="/static/common/images/default_image.gif" style="max-width: 150px;max-height: 100px;">
+			</div>
+			{/gt}
+        </div>
+    </div>
+</div>

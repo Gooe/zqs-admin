@@ -66,7 +66,7 @@ class Admin extends Model
      */
     public static function onBeforeUpdate($admin)
     {
-        //只针对后台操作
+        //只针对后台管理操作
         if (!empty($admin->childrenIds)){
             //先移除所有权限
             AuthGroupAccess::where('uid',$admin->id)->delete();

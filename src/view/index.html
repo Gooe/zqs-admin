@@ -33,20 +33,20 @@
             </a>
           </li>
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords="> 
+            <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="{:url('serach',['keywords'=>''])}"> 
           </li>
         </ul>
         <!-- 右 -->
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
           
-          <li class="layui-nav-item" lay-unselect>
+          <!-- <li class="layui-nav-item" lay-unselect>
             <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
               <i class="layui-icon layui-icon-notice"></i>  
               
-              <!-- 如果有新消息，则显示小圆点 -->
               <span class="layui-badge-dot"></span>
             </a>
           </li>
+           -->
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="theme">
               <i class="layui-icon layui-icon-theme"></i>
@@ -64,13 +64,14 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite></cite>
+              <cite><img src="{$admin->headimg|get_file_path}" class="layui-nav-img">{$admin->nickname}</cite>
             </a>
             <dl class="layui-nav-child">
-              <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-              <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+              <dd data-url="{:url('personal/clear_cache')}" layadmin-event="clear_cache" ><a href="javascript:;">清除缓存</a></dd>
+              <dd><a lay-href="{:url('personal/info')}">基本资料</a></dd>
+              <dd><a lay-href="{:url('personal/password')}">修改密码</a></dd>
               <hr>
-              <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+              <dd style="text-align: center;"><a href="{:url('logout')}">退出</a></dd>
             </dl>
           </li>
           
@@ -105,15 +106,6 @@
               {/notempty}
             </li>
             {/volist}
-
-            
-            <!-- <li data-name="get" class="layui-nav-item">
-              <a href="javascript:;" lay-href="//www.layui.com/admin/#get" lay-tips="授权" lay-direction="2">
-                <i class="layui-icon layui-icon-auz"></i>
-                <cite>授权</cite>
-              </a>
-            </li> -->
-
 
           </ul>
         </div>

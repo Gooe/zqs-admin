@@ -123,6 +123,9 @@ class Group extends Admin
             }
             
             $params = $this->request->post("row/a");
+            if (empty($params['rule_ids'])){
+                $this->error('请选择权限');
+            }
             // 父节点不能是它自身的子节点TODO::这里好像错了，这里的childrenIds是当前管理员的并不是自身的
             if (!in_array($params['pid'], $this->childrenIds)){
                 $this->error('超出了你的权限范围');
@@ -153,7 +156,7 @@ class Group extends Admin
             }
         }
         if ($row['pid']==0){
-            return '禁止操作';
+            return $this->result('',0,'禁止编辑','json');
         }
         $this->assign('edit',1);
         $this->assign("row", $row);

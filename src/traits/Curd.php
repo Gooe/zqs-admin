@@ -58,7 +58,11 @@ trait Curd
             $data = $data ?? Request::param();
             //验证
             if (!empty($this->validate_class)){
-                $re = $this->validate($data,$this->validate_class.'.add');
+                $validate_class = $this->validate_class;
+                if (!strpos($this->validate_class, '.')) {
+                    $validate_class = $validate_class.'.add';
+                }
+                $re = $this->validate($data,$validate_class);
                 if (true!==$re){
                     $this->error($re['msg']);
                 }
@@ -84,7 +88,11 @@ trait Curd
             $data = $data ?? Request::param();
             //验证
             if (!empty($this->validate_class)){
-                $re = $this->validate($data,$this->validate_class.'.edit');
+                $validate_class = $this->validate_class;
+                if (!strpos($this->validate_class, '.')) {
+                    $validate_class = $validate_class.'.edit';
+                }
+                $re = $this->validate($data,$validate_class);
                 if (true!==$re){
                     $this->error($re['msg']);
                 }
@@ -98,7 +106,6 @@ trait Curd
             $info['id'] = $info[$pk];
         }
         $this->assign('info',$info);
-        
         return $this->form
                     ->setPageTitle('编辑'.$this->form->getVars('page_title'))
                     ->setDataUrl('edit')
@@ -130,13 +137,15 @@ trait Curd
         
         $Model = $this->model;
         $protect_table = [
-            config('database.connections.mysql.prefix').'admin',
-            config('database.connections.mysql.prefix').'auth_rule',
-            config('database.connections.mysql.prefix').'auth_group',
+            config('database.connections.mysql.prefix').'admin' => '1',
+            config('database.connections.mysql.prefix').'auth_rule' => '1',
+            config('database.connections.mysql.prefix').'auth_group' => '1',
+            config('database.connections.mysql.prefix').'config' => '1,2',
         ];
         
         // 禁止操作核心表的主要数据
-        if (in_array($Model->getTable(), $protect_table) && in_array('1', $ids)) {
+        if (isset($protect_table[$Model->getTable()]) && count(array_intersect(str2arr($protect_table[$Model->getTable()]), $ids))>0 ){
+        //if (in_array($Model->getTable(), $protect_table) && in_array('1', $ids)) {
             $this->error('受保护数据,禁止操作');
         }
         // 主键名称

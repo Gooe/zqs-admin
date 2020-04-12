@@ -24,6 +24,8 @@ class Form extends Builder
         'css_list'          => [],// css列表
         'extra_js'          => '',// 额外JS代码
         'extra_css'         => '',// 额外CSS代码
+        'value_fields'      => '',//赋值的字段,为空则不限制
+        'tab_nav'           => [],//选项卡
     ];
     
     /**
@@ -66,10 +68,19 @@ class Form extends Builder
         return $this;
     }
     
-    public function addLayuiModulesJs($name)
+    /**
+     * 添加额外的js代码片段
+     * @param string $name
+     * @param array $vars
+     * @return \zqs\admin\builder\form\Form
+     */
+    public function addLayuiModulesJs($name,$vars=[])
     {
-        $this->vars['layui_modules_js'][] = $name;
-        $this->vars['layui_modules_js'] = array_unique($this->vars['layui_modules_js']);
+        $this->vars['layui_modules_js'][] = [
+            'name' => $name,
+            'vars' => $vars,
+        ];
+        //$this->vars['layui_modules_js'] = array_unique($this->vars['layui_modules_js']);
         return $this;
     }
     
@@ -83,7 +94,7 @@ class Form extends Builder
      * @param string $help 帮助文本
      * @param string $extra_attr 额外属性 such as: disable=""
      */
-    public function addInput($title='',$name='',$type='text',$value='',$verify='required',$help='',$extra_css='',$extra_attr='')
+    public function addInput($title='',$name='',$value='',$type='text',$verify='required',$help='',$extra_css='',$extra_attr='')
     {
         if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
             $title       = $matches[1];
@@ -118,7 +129,7 @@ class Form extends Builder
      * @param string $extra_css 额外css
      * @return mixed
      */
-    public function addSelect($title='',$name='',$options=[],$value='',$verify='required',$help='',$extra_css='',$extra_attr='')
+    public function addSelect($title='',$name='',$value='',$options=[],$verify='required',$help='',$extra_css='',$extra_attr='')
     {
         if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
             $title       = $matches[1];
@@ -130,6 +141,7 @@ class Form extends Builder
             if (in_array('multiple', explode(' ', $extra_attr))) {
                 $type = 'select2';
                 $this->js('xm-select','admin');
+                $this->addLayuiModulesJs('select2',['name'=>$name,'options'=>$options,'value'=>$value]);
             }
         }
         
@@ -149,26 +161,51 @@ class Form extends Builder
         $this->vars['form_items'][] = $item;
         return $this;
     }
+    
+    /**
+     * 单选
+     * @param string $title
+     * @param string $name
+     * @param array $options
+     * @param string $value
+     * @param string $help
+     * @param string $extra_css
+     * @param string $extra_attr  ['a'=>'disabled']
+     */
+    public function addRadio($title='',$name='',$value='',$options=[],$help='',$extra_css='',$extra_attr=[])
+    {
+        $item = [
+            'item'        => 'radio',
+            'name'        => $name,
+            'title'       => $title,
+            'options'     => $options,
+            'value'       => $value,
+            'help'        => $help,
+            'extra_attr'  => $extra_attr,
+            'extra_css'   => $extra_css,
+        ];
+        
+        $this->vars['form_items'][] = $item;
+        return $this;
+    }
     /**
      * 添加开关
      * @param string $title
      * @param string $name
-     * @param string $value
+     * @param string $value 1即是选中，0不先中
      * @param string $text
-     * @param string $checked
      * @return \zqs\admin\builder\form\Form
      */
-    public function addSwitch($title='',$name='',$value='',$text='开|关',$checked='')
+    public function addSwitch($title='',$name='',$value='0',$text='开|关')
     {
         $item = [
             'item'        => 'switch',
             'name'        => $name,
             'title'       => $title,
             'value'       => $value,
-            'text'        => $text,
-            'checked'     => $checked
+            'text'        => $text
         ];
-        
+        $this->addLayuiModulesJs('switch',$item);
         $this->vars['form_items'][] = $item;
         return $this;
     }
@@ -189,10 +226,86 @@ class Form extends Builder
             'value'       => $value,
         ];
         $this->addLayuiModules('iconPicker');
-        $this->addLayuiModulesJs('iconPicker');
+        $this->addLayuiModulesJs('iconPicker',$item);
         $this->vars['form_items'][] = $item;
         return $this;
     }
+    
+    /**
+     * 单图上传
+     * @param string $title
+     * @param string $name
+     * @param int $value 
+     * @param array $extra
+     * @return \zqs\admin\builder\form\Form
+     */
+    public function addImage($title='',$name='',$value=0,$extra=[])
+    {
+        
+        $item = [
+            'item'      => 'upload_image',
+            'title'     => $title,
+            'name'      => $name,
+            'value'     => (int)$value,
+        ];
+        $item = array_merge($item,$extra);
+        $this->addLayuiModules('upload');
+        $this->addLayuiModulesJs('upload_image',$item);
+        $this->vars['form_items'][] = $item;
+        return $this;
+    }
+    
+    /**
+     * 添加textarea
+     * @param string $title
+     * @param string $name
+     * @param string $type [text/number/email/tel...] checkbox/radio不用使用
+     * @param string $value
+     * @param string $verify 验证规则required/phome/mobile/url/number/date/identity身份证
+     * @param string $help 帮助文本
+     * @param string $extra_attr 额外属性 such as: disable=""
+     */
+    public function addTextarea($title='',$name='',$value='',$verify='required',$extra_css='',$extra_attr='')
+    {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+        $item = [
+            'item'        => 'textarea',
+            'title'       => $title,
+            'name'        => $name,
+            'value'       => $value,
+            'verify'      => $verify,
+            'extra_attr'  => $extra_attr,
+            'extra_css'   => $extra_css,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
+        ];
+        $this->vars['form_items'][] = $item;
+        return $this;
+    }
+    
+    /**
+     * 设置Tab按钮列表
+     * @param array $tab_list Tab列表 如：['tab1' => ['title' => '标题', 'url' => 'http://www.baidu.com']]
+     * @param string $curr_tab 当前tab名
+     * @return $this
+     */
+    public function addTabNav($tab_list = [], $curr_tab = '')
+    {
+        if (!empty($tab_list)) {
+            $this->vars['tab_nav'] = [
+                'tab_list' => $tab_list,
+                'curr_tab' => $curr_tab,
+            ];
+        }
+        return $this;
+    }
+    
+    
+    
+    
+    
     
     /**
      * 添加表单项
@@ -230,7 +343,6 @@ class Form extends Builder
     }
     
     
-    
     /**
      * end
      */
@@ -238,7 +350,7 @@ class Form extends Builder
     {
         
         foreach ($this->vars['layui_modules_js'] as $k=>$v){
-            $this->vars['layui_modules_js'][$k] = $this->display(__DIR__."/js/{$v}.js");
+            $this->vars['layui_modules_js'][$k]['content'] = $this->display(__DIR__."/js/{$v['name']}.js",$v['vars']);
         }
         
     }

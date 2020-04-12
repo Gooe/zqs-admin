@@ -21,13 +21,14 @@ class Table extends Builder
         'search'            => [],//搜索表单
         'top_btns'          => [],//顶部按钮
         'page'             => [
-            'open' => 'false',
+            'open' => 'true',
             'limit' => 15,//每页条数
             'limits' => '[10,15,20,50,100,200]'//每页条数的选择项
         ],//分页相关
         'height'            => 'full-260',//高度
         'js_list'           => [],// js文件列表
         'css_list'          => [],// css列表
+        'tab_nav'           => [],//选项卡
     ];
     /**
      * 单元格类型
@@ -278,7 +279,7 @@ TPL;
                     'title' => '添加',
                     'icon' => 'layui-icon-edit',
                     'event' => 'edit',
-                    'class' => 'layui-btn iframe',
+                    'class' => 'layuiadmin-btn-admin layui-btn iframe',
                     'url' => 'add'
                 ];
                 break;
@@ -337,7 +338,22 @@ TPL;
         }
         return $this;
     }
-    
+    /**
+     * 设置Tab按钮列表
+     * @param array $tab_list Tab列表 如：['tab1' => ['title' => '标题', 'url' => 'http://www.baidu.com']]
+     * @param string $curr_tab 当前tab名
+     * @return $this
+     */
+    public function addTabNav($tab_list = [], $curr_tab = '')
+    {
+        if (!empty($tab_list)) {
+            $this->vars['tab_nav'] = [
+                'tab_list' => $tab_list,
+                'curr_tab' => $curr_tab,
+            ];
+        }
+        return $this;
+    }
     
     /**
      * end

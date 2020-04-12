@@ -101,7 +101,7 @@ class Adminuser extends Admin
                     ->setDataUrl('add')
                     ->setPageTitle('管理员')
                     ->addFormItems([
-                        ['select','角色组','group',$this->groupdata,'','required','','','multiple'],
+                        ['select','角色组','group','',$this->groupdata,'required','','','multiple'],
                         ['input','用户名','username'],
                         ['input','昵称','nickname'],
                         ['input','邮箱','email'],
@@ -126,28 +126,32 @@ class Adminuser extends Admin
      */
     public function edit($id,$data=null)
     {
+        if ($id==1){
+            return $this->result('',0,'禁止编辑','json');
+        }
         $data = input();
         //过滤不允许的组别,避免越权，注入参数
         $data['childrenIds'] = $this->childrenIds;
         //选中
         $grouplist = $this->auth->getGroups($id);
         $check_ids = array_column($grouplist, 'group_id');
-        foreach ($this->groupdata as $k=>$v){
+        /* foreach ($this->groupdata as $k=>$v){
             if (in_array($v['value'], $check_ids)){
                 $this->groupdata[$k]['selected'] = true;
             }
-        }
+        } */
         //重置表单
         $this->form =  Builder::make('form')
                         ->setDataUrl('edit')
                         ->setPageTitle('管理员')
                         ->addFormItems([
-                            ['select','角色组','group',$this->groupdata,'','required','','','multiple'],
-                            ['input','用户名','username','text','','req','不可更改','','disabled'],
+                            ['select','角色组','group',json_encode($check_ids),$this->groupdata,'required','','','multiple'],
+                            ['input','用户名','username','','text','req','不可更改','','disabled'],
                             ['input','昵称','nickname'],
                             ['input','邮箱','email'],
-                            ['input','密码','password','text','','','不填不更改'],
-                        ]);
+                            ['input','密码','password','','text','','不填不更改'],
+                        ])
+                        ->setVars('value_fields','nickname,username,email');
         return parent::edit($id,$data);
     }
     

@@ -91,7 +91,7 @@ abstract class Admin
         if (!$this->auth->match($this->noNeedLogin)){
             //检测是否登录
             if (!$this->auth->is_login()){
-                $this->redirect('xx');
+                $this->redirect('/'.get_admin_name().'/login');
             }
             // 判断是否需要验证权限
             if (!$this->auth->match($this->noNeedRight)){

@@ -8,10 +8,3 @@
     <div class="layui-form-mid layui-word-aux">{$vo.help}</div>
     {/notempty}
 </div>
-<script type="text/javascript">
-var xms_{$vo.name} = xmSelect.render({
-	el: '#{$vo.name}', 
-	name: "{$vo.name}",
-	data: {:json_encode($vo.options)}
-})
-</script>

@@ -86,7 +86,7 @@ class Rule extends Admin
                     //'delete',// => ['url'=>'menu/more']
                 ])
                 ->setHeight('')
-                //->setPage(['open'=>'true'])
+                ->setPage(['open'=>'false'])
                 ->fetch();
     }
     
@@ -130,14 +130,14 @@ class Rule extends Admin
                 //->addInput('路径','name')
                 //->addFormItem('input','哈哈')
                 ->addFormItems([
-                    ['input','菜单名称[:请输入菜单名称]','title','text','','required','有可能会显到菜单面板','width:200px;'],
+                    ['input','菜单名称[:请输入菜单名称]','title','','text','required','有可能会显到菜单面板','width:200px;'],
                     ['icon','图标','icon'],
-                    ['input','路径','name','text','',''],
-                    ['select','父级菜单','pid',$this->rule_data,'','required'],
-                    ['switch','是否菜单','ismenu','1','是|否'],
-                    ['input','条件','condition','text','',''],//可为空
-                    ['input','备注','remark','text','',''],
-                    ['input','权重','weigh','number','0','','权重越高越靠前','width:60px;'],
+                    ['input','路径','name','','text',''],
+                    ['select','父级菜单','pid','',$this->rule_data,'required'],
+                    ['switch','是否菜单','ismenu','0','是|否'],
+                    ['input','条件','condition','','text',''],//可为空
+                    ['input','备注','remark','','text',''],
+                    ['input','权重','weigh','0','number','','权重越高越靠前','width:60px;'],
                 ]);
                 //->fetch();
     }

@@ -1,4 +1,6 @@
 <?php
+use think\facade\Db;
+
 if (! function_exists('get_view_path')) {
     /**
      * 获取模板具体目录.
@@ -67,3 +69,106 @@ if (! function_exists('arr2str')) {
         return implode($glue, $arr);
     }
 }
+
+if (! function_exists('get_file_path')){
+    /**
+     * 获取文件路径
+     */
+    function get_file_path($idarr, $field = ''){
+        $default_img = '/static/common/images/default_image.gif';
+        if(empty($idarr)){
+            return $default_img;
+        }
+        if (strpos($idarr, ',')!==false){//多图
+            $pictureList = Db::name('attachment')->where('status',1)->where('id','in',$idarr)->field($field)->select();
+            return $pictureList;
+        }else {//单图
+            $picture = Db::name('attachment')->where(['status'=>1,'id'=>$idarr])->find();
+            if (!$picture){
+                return $default_img;
+            }
+            return empty($field) ? $picture['url'] : $picture[$field];
+        }
+    }
+}
+if (!function_exists('parse_attr')) {
+    /**
+     * 解析配置
+     * @param string $value 配置值
+     * @return array|string
+     */
+    function parse_attr($value = '') {
+        $array = preg_split('/[,;\r\n]+/', trim($value, ",;\r\n"));
+        if (strpos($value, ':')) {
+            $value  = array();
+            foreach ($array as $val) {
+                list($k, $v) = explode(':', $val);
+                $value[$k]   = $v;
+            }
+        } else {
+            $value = $array;
+        }
+        return $value;
+    }
+}
+
+if (! function_exists('config_db')){
+    /**
+     * 获取数据库中的配置
+     * @param string $name
+     */
+    function config_db($name=''){
+        $configs = Db::name('config')->cache('__db_config__')->column('value,type', 'name');
+        $result = [];
+        foreach ($configs as $config) {
+            switch ($config['type']) {
+                case 'array':
+                    $result[$config['name']] = parse_attr($config['value']);
+                    break;
+                case 'checkbox':
+                    if ($config['value'] != '') {
+                        $result[$config['name']] = explode(',', $config['value']);
+                    } else {
+                        $result[$config['name']] = [];
+                    }
+                    break;
+                default:
+                    $result[$config['name']] = $config['value'];
+                    break;
+            }
+        }
+        
+        return $name != '' ? $result[$name] : $result;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
