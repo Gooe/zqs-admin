@@ -1,7 +1,7 @@
 {
-	"license": "MIT",
 	"name" : "zqscjj/zqs-admin",
 	"description" : "zqs-admin",
+	"license" : "Apache-2.0",
 	"authors" : [{
 			"name" : "zqs",
 			"email" : "zqscjj@163.com"
