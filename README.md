@@ -78,4 +78,4 @@ return Builder::make('table')
 
 ![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/4.png)
 
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/1.png)
+![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/5.png)
