@@ -67,6 +67,12 @@
 	        		{case textarea}
 	        			{include file="form/items/textarea"}
 	        		{/case}
+	        		{case layedit}
+	        			{include file="form/items/layedit"}
+	        		{/case}
+	        		{case tinymce}
+	        			{include file="form/items/tinymce"}
+	        		{/case}
 	        	{/switch}
         	{/volist}
 
@@ -110,30 +116,7 @@
 			$('.layui-fluid').css('padding',0);
 			$('html').css('background','#fff');
 		}
-		/* 监听提交 */
-	    form.on('submit(form)', function(data){
-	    	var url = "{$data_url|default=''}";
-	    	var post_data = data.field;
-		    admin.req({
-              	url: url
-              	,data: post_data
-              	,type:'post'
-                ,success: function(res){
-	                if (res.code==1) {
-		                parent.layer.msg(res.msg);
-		                if(popup_index){
-							parent.layer.close(popup_index); //关闭  
-		                	parent.layui.table.reload('LAY-zqs-admin-table');
-		                }
-	                }else{
-	                  //layer.msg(res.msg,{icon:2});
-	                }
-                
-                }
-            });
-
-	     	return false;
-	    });
+		
 
 	    //赋值
 	    {notempty name="info"}
@@ -159,6 +142,32 @@
 		{$vo.content|raw}
 		{/volist}
 		{/notempty}
+
+
+		/* 监听提交 */
+	    form.on('submit(form)', function(data){
+	    	var url = "{$data_url|default=''}";
+	    	var post_data = data.field;
+		    admin.req({
+              	url: url
+              	,data: post_data
+              	,type:'post'
+                ,success: function(res){
+	                if (res.code==1) {
+		                parent.layer.msg(res.msg);
+		                if(popup_index){
+							parent.layer.close(popup_index); //关闭  
+		                	parent.layui.table.reload('LAY-zqs-admin-table');
+		                }
+	                }else{
+	                  //layer.msg(res.msg,{icon:2});
+	                }
+                
+                }
+            });
+
+	     	return false;
+	    });
 
 		
 	})

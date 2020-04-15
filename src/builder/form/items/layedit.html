@@ -1,0 +1,6 @@
+ <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">{$vo.title|raw}</label>
+    <div class="layui-input-block">
+      <textarea name="{$vo.name}" lay-verify="{$vo.verify|default=''}" placeholder="{$vo.placeholder|raw|default='请输入'}" class="layui-textarea" id="layedit_{$vo.name}">{$vo.value|default=''}</textarea>
+    </div>
+</div>

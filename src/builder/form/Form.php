@@ -285,6 +285,28 @@ class Form extends Builder
         return $this;
     }
     
+    public function addEditor($title='',$name='',$value='',$type='tinymce',$extra_css='')
+    {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
+        $item = [
+            'item'        => $type,
+            'title'       => $title,
+            'name'        => $name,
+            'value'       => $value,
+            'extra_css'   => $extra_css,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入'.$title,
+        ];
+        if ($type=='tinymce'){
+            $this->addLayuiModules('tinymce');
+            $this->addLayuiModulesJs('tinymce',$item);
+        }
+        $this->vars['form_items'][] = $item;
+        return $this;
+    }
+    
     /**
      * 设置Tab按钮列表
      * @param array $tab_list Tab列表 如：['tab1' => ['title' => '标题', 'url' => 'http://www.baidu.com']]
@@ -301,11 +323,6 @@ class Form extends Builder
         }
         return $this;
     }
-    
-    
-    
-    
-    
     
     /**
      * 添加表单项

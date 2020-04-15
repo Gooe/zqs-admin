@@ -43,15 +43,8 @@ class Personal extends Admin
             'email' => input('email'),
             'headimg' => input('headimg'),
         ];
-        $re =  parent::edit($this->auth->uid);
-        //因为个人资料面板读取的Session显示，修改自己资料后同时更新Session
-        $admin = session('admin');
-        $admin_id = $admin ? $admin->uid : 0;
-        if($this->auth->uid==$admin_id){
-            $admin = $this->model->find($admin_id);
-            session("admin", $admin);
-        }
-        return $re;
+        
+        return parent::edit($this->auth->uid,$data);
     }
     
     /**
@@ -106,8 +99,20 @@ class Personal extends Admin
     }
     
     
-    
-    
+    /**
+     * 修改
+     */
+    public function after_edit($data=null)
+    {
+        
+        //因为个人资料面板读取的Session显示，修改自己资料后同时更新Session
+        $admin = session('admin');
+        $admin_id = $admin ? $admin->uid : 0;
+        if($this->auth->uid==$admin_id){
+            $admin = $this->model->find($admin_id);
+            session("admin", $admin);
+        }
+    }
     
     
     

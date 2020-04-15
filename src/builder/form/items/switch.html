@@ -1,7 +1,7 @@
 <div class="layui-form-item">
     <label class="layui-form-label">{$vo.title|raw}</label>
     <div class="layui-input-block">
-      	<input type="checkbox" name="{$vo.name}" value="{$vo.value|default=''}" lay-skin="switch" lay-filter="switch_{$vo.name}" lay-text="{$vo.text|default='ON/OFF'}"  {eq name="vo.value" value="1"} checked="" {/eq}>
+      	<input type="checkbox" name="{$vo.name}" value="{$vo.value|default=''}" lay-skin="switch" lay-filter="switch_{$vo.name}" lay-text="{$vo.text|default='ON/OFF'}"  {eq name="vo.value" value="1"} checked{/eq} >
       	<input type="hidden" name="{$vo.name}" value="{$vo.value|default=''}">
     </div>
 </div>

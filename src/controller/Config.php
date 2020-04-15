@@ -69,6 +69,7 @@ class Config extends Admin
                         ->addTopBtns('add,delete')
                         ->addRightBtns('edit,delete')
                         ->addTabNav($tab_list, $group)
+                        ->setHeight('full-160')
                         ->fetch();
     }
     

@@ -21,9 +21,15 @@ class Upload extends Admin
             'fileExt' => 'jpg,png,jpeg,gif',
             'fileMime' => 'image/jpeg,image/jpg,image/png,image/gif',
         ];
-        
+        //从哪里上传来的  默认表单
+        $up_from = input('up_from','form');
         // 获取表单上传文件 例如上传了001.jpg
-        $file = $this->request->file('image');
+        //表单名
+        $target = input('target','image');
+        $file = $this->request->file($target);
+        if (!$file){
+            return $this->error('请选择图片');
+        }
         
         //验证
         $ret = $this->validate(['image'=>$file], ['image'=>$image_validate]);
@@ -39,7 +45,7 @@ class Upload extends Admin
                     'url' => $uploaded['url'],
                     'name' => $uploaded['name']
                 ];
-                $this->success('上传成功','',$data);
+                return $this->success('上传成功','',$data);
             }
             //保存文件
             $savename = \think\facade\Filesystem::disk('public')->putFile( 'uploads/image', $file);

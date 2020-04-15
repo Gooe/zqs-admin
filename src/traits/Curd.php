@@ -98,7 +98,11 @@ trait Curd
                 }
             }
             $info->save($data);
-            $this->success('更新成功');
+            //后置操作
+            if (method_exists($this, 'after_edit')){
+                $this->after_edit($info);
+            }
+            return $this->success('更新成功');
         }
         //主键非id情况
         $pk = $this->model->getPk();

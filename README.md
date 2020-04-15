@@ -1,8 +1,12 @@
-# zqs-admin 通用管理后台-
-服务端：基于最新版tp6，前端：layuiadmin
-layuiadmin为收费版，这里没有上传，请购买后放于项目public/static目录
+# zqs-admin 通用管理后台
+
+服务端：基于最新版tp6，
+前端：layuiadmin（layuiadmin为收费版，这里没有上传，请购买后放于项目public/static目录）
+
 # 安装
 composer require zqscjj/zqs-admin
+# 注意事项
+1.若要支持 emoji 等表情 数据库需设置 CHARSET = utf8mb4
 # builder构建组件
 ### 1. from表单构建器
 示例：
@@ -70,12 +74,12 @@ return Builder::make('table')
                 ->fetch();
 ```
 # Demo
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/1.png)
+![](https://gooe.github.io/zqs-admin/demo/1.png)
 
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/2.png)
+![]((https://gooe.github.io/zqs-admin/demo/2.png)
 
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/3.png)
+![]((https://gooe.github.io/zqs-admin/demo/3.png)
 
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/4.png)
+![]((https://gooe.github.io/zqs-admin/demo/4.png)
 
-![](https://raw.githubusercontent.com/Gooe/zqs-admin/master/demo/5.png)
+![]((https://gooe.github.io/zqs-admin/demo/5.png)

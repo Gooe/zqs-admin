@@ -77,7 +77,7 @@ class Rule extends Admin
                 /* ->addSearchItems([
                     ['名称','title','text','input'],
                     ['url','name','text'],
-                    ['菜单','ismenu','','select','请选择',[''=>'不限',0=>'否',1=>'是']]
+                    ['菜单[:请选择菜单]','ismenu','','select',[''=>'不限',0=>'否',1=>'是']]
                 ]) */
                 //->addSearchItem('','keyword','text','input','菜单名')
                 //->addTopBtn('delete')
@@ -134,7 +134,7 @@ class Rule extends Admin
                     ['icon','图标','icon'],
                     ['input','路径','name','','text',''],
                     ['select','父级菜单','pid','',$this->rule_data,'required'],
-                    ['switch','是否菜单','ismenu','0','是|否'],
+                    ['switch','是否菜单','ismenu','1','是|否'],
                     ['input','条件','condition','','text',''],//可为空
                     ['input','备注','remark','','text',''],
                     ['input','权重','weigh','0','number','','权重越高越靠前','width:60px;'],

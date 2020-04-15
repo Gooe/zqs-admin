@@ -38,49 +38,57 @@
       </div>
       {/notempty}
       
-      <!-- 搜索区域 -->
-      {notempty name="search"}
-      <div class="layui-form layui-card-header layuiadmin-card-header-auto" style="text-align: right;padding: 10px 0;">
-        <div class="layui-form-item">
-          {volist name="search" id="vo"}
-          {eq name="vo.item" value="input"}
-          <div class="layui-inline">
-            <label class="layui-form-label">{$vo.name}</label>
-            <div class="layui-input-block">
-              <input type="{$vo.type}" name="{$vo.field}" placeholder="{$vo.placeholder}" autocomplete="off" class="layui-input">
-            </div>
-          </div>
-          {/eq}
-          {eq name="vo.item" value="select"}
-          <div class="layui-inline">
-            <label class="layui-form-label">{$vo.name}</label>
-            <div class="layui-input-block">
-              <select name="{$vo.field}">
-                {volist name="vo.extra" id="opt"}<option value="{$key}">{$opt}</option>{/volist}
-              </select>
-            </div>
-          </div>
-          {/eq}
-          {/volist}
-          
-          <div class="layui-inline">
-            <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-zqs-admin-search">
-              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      {/notempty}
+      
       
       <div class="layui-card-body">
-        <!-- 顶部按钮 -->
-        {notempty name="top_btns"}
-        <div style="padding-bottom: 10px;">
-          {volist name="top_btns" id="vo"}
-          <button class="layui-btn topbtn {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
-          {/volist}
+        <div class="layui-row">
+          <div class="layui-col-md4">
+            <!-- 顶部按钮 -->
+            {notempty name="top_btns"}
+            <div style="padding-bottom: 10px;">
+              {volist name="top_btns" id="vo"}
+              <button class="layui-btn topbtn {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
+              {/volist}
+            </div>
+            {/notempty}
+          </div>
+          <div class="layui-col-md8">
+            <!-- 搜索区域 -->
+            {notempty name="search"}
+            <div class="layui-form" style="text-align: right">
+              <div class="layui-form-item">
+                {volist name="search" id="vo"}
+                {eq name="vo.item" value="input"}
+                <div class="layui-inline">
+                  <label class="layui-form-label">{$vo.name}</label>
+                  <div class="layui-input-block">
+                    <input type="{$vo.type}" name="{$vo.field}" placeholder="{$vo.placeholder}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                {/eq}
+                {eq name="vo.item" value="select"}
+                <div class="layui-inline">
+                  <label class="layui-form-label">{$vo.name}</label>
+                  <div class="layui-input-block">
+                    <select name="{$vo.field}">
+                      <option value="">{$vo.placeholder}</option>
+                      {volist name="vo.extra" id="opt"}<option value="{$key}">{$opt|raw}</option>{/volist}
+                    </select>
+                  </div>
+                </div>
+                {/eq}
+                {/volist}
+                
+                <div class="layui-inline">
+                  <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-zqs-admin-search">
+                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/notempty}
+          </div>
         </div>
-        {/notempty}
         
         <table id="LAY-zqs-admin-table" lay-filter="LAY-zqs-admin-table"></table>  
 

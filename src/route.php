@@ -26,6 +26,10 @@ Route::group('', function () {
     Route::rule('personal/:action','zqs\admin\controller\Personal@:action');
     //配置
     Route::rule('config/:action','zqs\admin\controller\Config@:action');
+    //cms
+    Route::rule('cms/attach/:action','zqs\admin\controller\cms\Attach@:action');
+    Route::rule('cms/cate/:action','zqs\admin\controller\cms\cate@:action');
+    Route::rule('cms/article/:action','zqs\admin\controller\cms\article@:action');
     
 });//->middleware(\zqs\admin\middleware\Auth::class);
 

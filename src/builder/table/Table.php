@@ -25,7 +25,7 @@ class Table extends Builder
             'limit' => 15,//每页条数
             'limits' => '[10,15,20,50,100,200]'//每页条数的选择项
         ],//分页相关
-        'height'            => 'full-260',//高度
+        'height'            => 'full-100',//高度
         'js_list'           => [],// js文件列表
         'css_list'          => [],// css列表
         'tab_nav'           => [],//选项卡
@@ -33,7 +33,7 @@ class Table extends Builder
     /**
      * 单元格类型
      */
-    private $row_type = ['status','switch','icon'];
+    private $row_type = ['status','switch','icon','image'];
     /**
      * 右侧按钮
      */
@@ -111,6 +111,8 @@ TPL;
                 case 'icon'://图标
                     $column['templet'] = '<div><i class="layui-icon {{d.'.$field.'}}"></i></div>';
                     break;
+                case 'image';//图片
+                    $column['templet'] = 'function(d){return \'<img src=" \'+d.'.$field.'+ \'" onclick="layer.open({type:1,title:false,colseBtn:0,area: [\\\'auto\\\'],shadeClose:true,content:\\\'<img style=max-height:500px src=\\\'+this.src+\\\' >\\\'})"  style="max-height:100%;" >\'}';
             }
         }else {
             $column['type'] = $type?:'normal';
@@ -237,15 +239,26 @@ TPL;
     
     /**
      * 添加搜索
+     * @param string $title 标题
+     * @param string $field 搜索的字段
+     * @param string $type input类型时有效为 <input type="$type" />
+     * @param string $item  input/select..
+     * @param string $placeholder 
+     * @param array $extra $item=select时的选择项
+     * @return \zqs\admin\builder\table\Table
      */
-    public function addSearchItem($title,$field,$type='text',$item='input',$placeholder='请输入',$extra=[])
+    public function addSearchItem($title='',$field='',$type='text',$item='input',$extra=[])
     {
+        if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
+            $title       = $matches[1];
+            $placeholder = $matches[2];
+        }
         $item = [
             'name' => $title,
             'field' => $field,
             'type' => $type,
             'item' => $item,
-            'placeholder' => $placeholder,
+            'placeholder' => isset($placeholder) ? $placeholder : '请输入',
             'extra' => $extra,
         ];
         $this->vars['search'][] = $item;
