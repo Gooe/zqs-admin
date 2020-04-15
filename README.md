@@ -76,10 +76,10 @@ return Builder::make('table')
 # Demo
 ![](https://gooe.github.io/zqs-admin/demo/1.png)
 
-![]((https://gooe.github.io/zqs-admin/demo/2.png)
+![](https://gooe.github.io/zqs-admin/demo/2.png)
 
-![]((https://gooe.github.io/zqs-admin/demo/3.png)
+![](https://gooe.github.io/zqs-admin/demo/3.png)
 
-![]((https://gooe.github.io/zqs-admin/demo/4.png)
+![](https://gooe.github.io/zqs-admin/demo/4.png)
 
-![]((https://gooe.github.io/zqs-admin/demo/5.png)
+![](https://gooe.github.io/zqs-admin/demo/5.png)
