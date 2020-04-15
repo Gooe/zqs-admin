@@ -1,6 +1,6 @@
 {
 	"name" : "zqscjj/zqs-admin",
-	"description" : "zqs-admin",
+	"description" : "基于最新tp6和layuiadmin的通用后台管理系统，强大自由的构建器，极少的代码打造完善的后台管理，开发后台轻而易举！",
 	"license" : "Apache-2.0",
 	"authors" : [{
 			"name" : "zqs",
