@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50644
 File Encoding         : 65001
 
-Date: 2020-04-15 23:19:53
+Date: 2020-04-16 14:58:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -224,7 +224,7 @@ CREATE TABLE `zqs_auth_rule` (
   KEY `pid` (`pid`) USING BTREE,
   KEY `weigh` (`weigh`) USING BTREE,
   KEY `name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='节点表';
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='节点表';
 
 -- ----------------------------
 -- Records of zqs_auth_rule
@@ -254,12 +254,19 @@ INSERT INTO `zqs_auth_rule` VALUES ('22', 'file', '9', '/config/edit', '编辑',
 INSERT INTO `zqs_auth_rule` VALUES ('23', 'file', '9', '/config/delete', '删除', '', '', '', '0', '1586617943', '1586617943', '0', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('24', 'file', '8', '/config/system_save', '保存', '', '', '', '0', '1586682903', '1586682903', '0', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('25', 'file', '0', 'cms', '内容', 'layui-icon-read', '', '', '1', '1586706681', '1586706681', '0', '1');
-INSERT INTO `zqs_auth_rule` VALUES ('26', 'file', '25', '/cms/article/index', '文章列表', '', '', '', '1', '1586707123', '1586786338', '1', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('26', 'file', '25', '/cms/article/index', '文章列表', '', '', '', '1', '1586707123', '1587020245', '1', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('27', 'file', '25', '/cms/cate/index', '文章分类', '', '', '', '1', '1586707151', '1586707151', '0', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('28', 'file', '25', '/cms/attach/index', '附件管理', '', '', '', '1', '1586707187', '1586707951', '-1', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('29', 'file', '28', '/cms/attach/index', '查看', '', '', '', '0', '1586786084', '1586786084', '0', '1');
 INSERT INTO `zqs_auth_rule` VALUES ('30', 'file', '28', '/cms/attach/delete', '删除', '', '', '', '0', '1586786103', '1586786103', '0', '1');
-INSERT INTO `zqs_auth_rule` VALUES ('31', 'file', '26', '/cms/article/index', '查看', '', '', '', '0', '1586786349', '1586786349', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('31', 'file', '26', '/cms/article/index', '查看', '', '', '', '0', '1586786349', '1587020061', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('32', 'file', '26', '/cms/article/add', '添加', '', '', '', '0', '1587019579', '1587019641', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('33', 'file', '26', '/cms/article/edit', '编辑', '', '', '', '0', '1587019678', '1587019683', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('34', 'file', '26', '/cms/article/delete', '删除', '', '', '', '0', '1587019696', '1587019696', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('35', 'file', '27', '/cms/cate/index', '查看', '', '', '', '0', '1587019729', '1587019729', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('36', 'file', '27', '/cms/cate/add', '添加', '', '', '', '0', '1587019764', '1587019764', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('37', 'file', '27', '/cms/cate/edit', '编辑', '', '', '', '0', '1587019777', '1587019777', '0', '1');
+INSERT INTO `zqs_auth_rule` VALUES ('38', 'file', '27', '/cms/cate/delete', '删除', '', '', '', '0', '1587019795', '1587019795', '0', '1');
 
 -- ----------------------------
 -- Table structure for zqs_config
@@ -287,12 +294,12 @@ CREATE TABLE `zqs_config` (
 -- ----------------------------
 INSERT INTO `zqs_config` VALUES ('1', 'config_group', 'array', '配置分组', 'system', '', 'base:基础\nsystem:系统\nupload:上传\ndevelop:开发\ndatabase:数据库', '0', '', '0', '1586605081', '1');
 INSERT INTO `zqs_config` VALUES ('2', 'form_item_type', 'array', '配置类型', 'system', '', 'input:单行文本\ntextarea:多行文本\nswitch:开关\nselect:下拉菜单\nselect2:下拉菜单多选\nimage:单图上传\nicon:图标\nradio:单选\narray:数组', '0', '', '0', '1586677458', '1');
-INSERT INTO `zqs_config` VALUES ('9', 'a', 'input', '单行文本', 'base', '', 'aaaa', '0', '', '1586623301', '1586708020', '1');
-INSERT INTO `zqs_config` VALUES ('10', 'b', 'textarea', '多行文本', 'base', '', 'bbbb123', '0', '', '1586623804', '1586708020', '1');
-INSERT INTO `zqs_config` VALUES ('11', 'c', 'switch', '开关', 'base', '', '0', '0', '', '1586675857', '1586708020', '1');
-INSERT INTO `zqs_config` VALUES ('12', 'd', 'select', '下拉菜单', 'base', 'a:是\nb:否\nc:中立\nd:逃', 'b', '0', '', '1586676357', '1586708020', '1');
-INSERT INTO `zqs_config` VALUES ('13', 'e', 'image', '单图上传', 'base', '', '2', '0', '', '1586676780', '1586708021', '1');
-INSERT INTO `zqs_config` VALUES ('14', 'f', 'icon', '图标选择', 'base', '', 'layui-icon-login-wechat', '0', '', '1586677153', '1586708021', '1');
+INSERT INTO `zqs_config` VALUES ('9', 'a', 'input', '单行文本', 'base', '', 'aaaa', '0', '', '1586623301', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('10', 'b', 'textarea', '多行文本', 'base', '', 'bbbb123', '0', '', '1586623804', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('11', 'c', 'switch', '开关', 'base', '', '1', '0', '', '1586675857', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('12', 'd', 'select', '下拉菜单', 'base', 'a:是\nb:否\nc:中立\nd:逃', 'b', '0', '', '1586676357', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('13', 'e', 'image', '单图上传', 'base', '', '2', '0', '', '1586676780', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('14', 'f', 'icon', '图标选择', 'base', '', 'layui-icon-login-wechat', '0', '', '1586677153', '1586965947', '1');
 INSERT INTO `zqs_config` VALUES ('15', 'g', 'radio', '单选', 'base', '1:x\n2:y', '1', '0', '', '1586677192', '1586708021', '1');
-INSERT INTO `zqs_config` VALUES ('16', 'h', 'array', '数组', 'base', '', '1:1\n2:2', '0', '', '1586677314', '1586708021', '1');
-INSERT INTO `zqs_config` VALUES ('17', 'i', 'select2', '下拉多选', 'base', 'a:1\nb:2\n3:3\n4:4', 'a', '0', '', '1586677489', '1586708021', '1');
+INSERT INTO `zqs_config` VALUES ('16', 'h', 'array', '数组', 'base', '', '1:1\n2:2', '0', '', '1586677314', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('17', 'i', 'select2', '下拉多选', 'base', 'a:1\nb:2\n3:3\n4:4', 'a,b,3,4', '0', '', '1586677489', '1586965947', '1');

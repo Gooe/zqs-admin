@@ -70,7 +70,7 @@ class Article extends Admin
                         ->addRightBtns('edit,delete')
                         ->addSearchItem('分类','cate_id','','select',$this->cate_list)
                         ->addSearchItem('[:标题]','keyword','text','input')
-                        ->setHeight('full-168')
+                        ->setHeight('full-110')
                         ->fetch();
         
     }
