@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50644
 File Encoding         : 65001
 
-Date: 2020-04-16 14:58:50
+Date: 2020-04-25 13:43:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -294,12 +294,12 @@ CREATE TABLE `zqs_config` (
 -- ----------------------------
 INSERT INTO `zqs_config` VALUES ('1', 'config_group', 'array', '配置分组', 'system', '', 'base:基础\nsystem:系统\nupload:上传\ndevelop:开发\ndatabase:数据库', '0', '', '0', '1586605081', '1');
 INSERT INTO `zqs_config` VALUES ('2', 'form_item_type', 'array', '配置类型', 'system', '', 'input:单行文本\ntextarea:多行文本\nswitch:开关\nselect:下拉菜单\nselect2:下拉菜单多选\nimage:单图上传\nicon:图标\nradio:单选\narray:数组', '0', '', '0', '1586677458', '1');
-INSERT INTO `zqs_config` VALUES ('9', 'a', 'input', '单行文本', 'base', '', 'aaaa', '0', '', '1586623301', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('10', 'b', 'textarea', '多行文本', 'base', '', 'bbbb123', '0', '', '1586623804', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('11', 'c', 'switch', '开关', 'base', '', '1', '0', '', '1586675857', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('12', 'd', 'select', '下拉菜单', 'base', 'a:是\nb:否\nc:中立\nd:逃', 'b', '0', '', '1586676357', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('13', 'e', 'image', '单图上传', 'base', '', '2', '0', '', '1586676780', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('14', 'f', 'icon', '图标选择', 'base', '', 'layui-icon-login-wechat', '0', '', '1586677153', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('15', 'g', 'radio', '单选', 'base', '1:x\n2:y', '1', '0', '', '1586677192', '1586708021', '1');
-INSERT INTO `zqs_config` VALUES ('16', 'h', 'array', '数组', 'base', '', '1:1\n2:2', '0', '', '1586677314', '1586965947', '1');
-INSERT INTO `zqs_config` VALUES ('17', 'i', 'select2', '下拉多选', 'base', 'a:1\nb:2\n3:3\n4:4', 'a,b,3,4', '0', '', '1586677489', '1586965947', '1');
+INSERT INTO `zqs_config` VALUES ('9', 'a', 'input', '单行文本', 'base', '', 'aaaa', '0', '', '1586623301', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('10', 'b', 'textarea', '多行文本', 'base', '', 'bbbb123', '0', '', '1586623804', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('11', 'c', 'switch', '开关', 'base', '', '1', '0', '', '1586675857', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('12', 'd', 'select', '下拉菜单', 'base', 'a:是\nb:否\nc:中立\nd:逃', 'b', '0', '', '1586676357', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('13', 'e', 'image', '单图上传', 'base', '', '2', '0', '', '1586676780', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('14', 'f', 'icon', '图标选择', 'base', '', 'layui-icon-login-wechat', '0', '', '1586677153', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('15', 'g', 'radio', '单选', 'base', '1:x\n2:y', '1', '0', '', '1586677192', '1587022157', '1');
+INSERT INTO `zqs_config` VALUES ('16', 'h', 'array', '数组', 'base', '', '1:1\n2:2', '0', '', '1586677314', '1587022162', '1');
+INSERT INTO `zqs_config` VALUES ('17', 'i', 'select2', '下拉多选', 'base', 'a:1\nb:2\n3:3\n4:4', 'a,b,3,4', '0', '', '1586677489', '1587022162', '1');
