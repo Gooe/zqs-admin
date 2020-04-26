@@ -113,8 +113,8 @@ class Builder
     }
     /**
      * 创建各种builder的入口
-     * @param string $type 构建器名称，'Form', 'Table', 'View' 或其他自定义构建器
-     * @return table\Builder|form\Builder|aside\Builder
+     * @param string $type 构建器名称，'Form', 'Table' 或其他自定义构建器
+     * @return zqs\admin\builder|form\Form|table\Table
      * @throws Exception
      */
     public function make($type = '')
