@@ -12,7 +12,7 @@
 		"topthink/framework" : "^6.0.0",
 		"topthink/think-captcha" : "^3.0.2",
 		"topthink/think-multi-app" : "^v1.0.12",
-		"qeq66/think-jump" : "^v1.2"
+		"liliuwei/thinkphp-jump" : "^1.5"
 	},
 	"autoload" : {
 		"psr-4" : {
