@@ -15,7 +15,7 @@ use zqs\admin\lib\AuthAdmin;
  */
 abstract class Admin
 {
-    use \qeq66\think\Jump;
+	use \liliuwei\think\Jump;
     use Curd;
     /**
      * Request实例
