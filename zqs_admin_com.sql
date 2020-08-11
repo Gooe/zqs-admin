@@ -280,7 +280,7 @@ CREATE TABLE `zqs_config` (
   `group` varchar(30) NOT NULL DEFAULT '0' COMMENT '配置分组',
   `options` varchar(255) DEFAULT NULL COMMENT '配置项',
   `value` text COMMENT '配置值',
-  `sort` smallint(3) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `sort` smallint(3) NOT NULL DEFAULT '0' COMMENT '排序',
   `remark` varchar(100) DEFAULT NULL COMMENT '配置说明',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
