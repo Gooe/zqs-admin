@@ -1,8 +1,9 @@
 <div class="layui-form-item">
     <label class="layui-form-label">{$vo.title|raw|default=""}</label>
     <div class="{notempty name='vo.help'}layui-input-inline{else/}layui-input-block{/notempty}" style="{$vo.extra_css|raw|default=''}" >
+     <!--修改如果是编辑则取数据库里的值 -->
       {volist name="vo.options" id="radio"}
-      <input type="radio" name="{$vo.name}" value="{$key}" title="{$radio}" {eq name="key" value="$vo.value"}checked {/eq}  {if isset($vo['extra_attr'][$key])} {$vo['extra_attr'][$key]}{/if}>
+      <input type="radio" name="{$vo.name}" value="{$key}" title="{$radio}" {if isset($info[$vo.name]) } {eq name="key" value="$info[$vo.name]"}checked {/eq} {else/} {eq name="key" value="$vo.value"}checked {/eq} {/if}  {if isset($vo['extra_attr'][$key])} {$vo['extra_attr'][$key]}{/if}>
       {/volist}
     </div>
     {// 辅助文字}

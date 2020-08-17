@@ -130,13 +130,16 @@ class Config extends Admin
     public function system_save()
     {
         if ($this->request->isAjax()){
-            $config = array_unique(array_filter(input('post.'), function ($val) {
+
+            //DEBUG 更新20200816 这里去掉了外层的array_nuique过滤
+            $config = array_filter(input('post.'), function ($val) {
                 if ($val === '0' || $val === 0 || $val != false) {
                     return true;
                 } else {
                     false;
                 }
-            }));
+            });
+
             foreach ($config as $name => $value)
             {
                 //如果是数组则json_encode存入

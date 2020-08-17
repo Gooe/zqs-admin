@@ -9,23 +9,14 @@ class Form extends Builder
      */
     private $tpl = '';
     /**
-     * @var array 模板参数变量
+     * @var array 私有模板参数变量
      */
-    protected $vars = [
-        'data_url'          => '',//数据url
-        'page_title'        => '',//页面标题
-        'page_tips'         => '',//页面提示
+    protected $_vars = [
         'form_title'        => '',//表单标题
-        'post_url'          => '',//表单提交地址
+        //'post_url'          => '',//表单提交地址
         'form_items'        => [],//表单项目
         'layui_modules'     => ['index','form'],//所使用的模块
-        'layui_modules_js'  => [],//额外的js代码片段
-        'js_list'           => [],// js文件列表
-        'css_list'          => [],// css列表
-        'extra_js'          => '',// 额外JS代码
-        'extra_css'         => '',// 额外CSS代码
         'value_fields'      => '',//赋值的字段,为空则不限制
-        'tab_nav'           => [],//选项卡
     ];
     
     /**
@@ -34,17 +25,9 @@ class Form extends Builder
     public function __construct()
     {
         $this->tpl = 'form/form';
+        $this->vars = array_merge($this->vars,$this->_vars);
     }
-    
-    /**
-     * 设置数据url
-     */
-    public function setDataUrl($url)
-    {
-        $this->vars['data_url'] = $url;
-        return $this;
-    }
-    
+
     /**
      * 设置表单头部标题
      * @param string $title 标题
@@ -55,39 +38,12 @@ class Form extends Builder
         $this->setVars('form_title', trim($title));
         return $this;
     }
-    
-    /**
-     * 添加layui module
-     * @param string $name
-     * @return \zqs\admin\builder\form\Form
-     */
-    public function addLayuiModules($name)
-    {
-        $this->vars['layui_modules'][] = $name;
-        $this->vars['layui_modules'] = array_unique($this->vars['layui_modules']);
-        return $this;
-    }
-    
-    /**
-     * 添加额外的js代码片段
-     * @param string $name
-     * @param array $vars
-     * @return \zqs\admin\builder\form\Form
-     */
-    public function addLayuiModulesJs($name,$vars=[])
-    {
-        $this->vars['layui_modules_js'][] = [
-            'name' => $name,
-            'vars' => $vars,
-        ];
-        //$this->vars['layui_modules_js'] = array_unique($this->vars['layui_modules_js']);
-        return $this;
-    }
+
     
     /**
      * 添加input表单
-     * @param string $title
-     * @param string $name
+     * @param string $title 名称
+     * @param string $name 字段名
      * @param string $type [text/number/email/tel...] checkbox/radio不用使用
      * @param string $value
      * @param string $verify 验证规则required/phome/mobile/url/number/date/identity身份证
@@ -166,8 +122,8 @@ class Form extends Builder
      * 单选
      * @param string $title
      * @param string $name
-     * @param array $options
-     * @param string $value
+     * @param string $value 默认值
+     * @param array $options 选项例 [1=>'男',2=>'女']
      * @param string $help
      * @param string $extra_css
      * @param string $extra_attr  ['a'=>'disabled']
@@ -284,7 +240,15 @@ class Form extends Builder
         $this->vars['form_items'][] = $item;
         return $this;
     }
-    
+
+    /**
+     * @param string $title
+     * @param string $name
+     * @param string $value
+     * @param string $type
+     * @param string $extra_css
+     * @return $this
+     */
     public function addEditor($title='',$name='',$value='',$type='tinymce',$extra_css='')
     {
         if (preg_match('/(.*)\[:(.*)\]/', $title, $matches)) {
@@ -307,22 +271,6 @@ class Form extends Builder
         return $this;
     }
     
-    /**
-     * 设置Tab按钮列表
-     * @param array $tab_list Tab列表 如：['tab1' => ['title' => '标题', 'url' => 'http://www.baidu.com']]
-     * @param string $curr_tab 当前tab名
-     * @return $this
-     */
-    public function addTabNav($tab_list = [], $curr_tab = '')
-    {
-        if (!empty($tab_list)) {
-            $this->vars['tab_nav'] = [
-                'tab_list' => $tab_list,
-                'curr_tab' => $curr_tab,
-            ];
-        }
-        return $this;
-    }
     
     /**
      * 添加表单项
@@ -365,11 +313,7 @@ class Form extends Builder
      */
     public function end()
     {
-        
-        foreach ($this->vars['layui_modules_js'] as $k=>$v){
-            $this->vars['layui_modules_js'][$k]['content'] = $this->display(__DIR__."/js/{$v['name']}.js",$v['vars']);
-        }
-        
+
     }
     
     /**

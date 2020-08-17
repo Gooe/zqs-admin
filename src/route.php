@@ -3,7 +3,6 @@ use think\facade\Route;
 
 //后台应用目录
 $admin_path = get_admin_path();
-
 //当前应用名称
 $app_name = app('http')->getName();
 

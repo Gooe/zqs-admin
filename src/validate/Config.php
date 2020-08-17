@@ -6,7 +6,7 @@ class Config extends Validate
 {
     
     protected $rule = [
-        'name|名称' => 'require|unique:config|alphaNum',
+        'name|变量名' => 'require|unique:config|alphaDash',
         'title|标题'  => 'require',
         'type|类型'    => 'require',
     ];

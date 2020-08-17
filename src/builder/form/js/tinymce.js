@@ -12,9 +12,9 @@ t.render({
     },
     menubar: false,
     convert_urls: false,
-    plugins:'code image link emoticons print preview colorpicker fullscreen table',
+    plugins:'code image media link emoticons print preview colorpicker fullscreen table',
     toolbar: [
-        "code | undo redo | image link emoticons | bold italic underline strikethrough | forecolor backcolor |table| styleselect fontselect fontsizeselect",
+        "code | undo redo | image media link emoticons | bold italic underline strikethrough | forecolor backcolor |table| styleselect fontselect fontsizeselect",
         "bullist numlist outdent indent | alignleft aligncenter alignright alignjustify | print preview colorpicker fullscreen"
     ]
 

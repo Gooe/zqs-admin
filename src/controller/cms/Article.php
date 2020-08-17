@@ -39,7 +39,6 @@ class Article extends Admin
                                     ['input','浏览量','read',0,'number','','','width:80px;']
                                 ])
                                 ->setVars('value_fields','id,title,cate_id,cover,read');
-                                ;
     }
     
     /**

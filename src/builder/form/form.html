@@ -14,6 +14,7 @@
 
 <div class="layui-fluid">
     <div class="layui-card">
+		{$extra_html_block_top|raw|default=''}
     	<!-- 选项卡 -->
 	    {notempty name="tab_nav"}
 	    <div class="layui-card-body" style="padding-left: 0;">
@@ -28,67 +29,75 @@
 	        </div>
 	      </div>
 	    {/notempty}
-	    
+
+		{$extra_html_page_tips_top|raw|default=''}
+
     	<!-- 提醒文字 -->
 		{notempty name="page_tips"}
 		<div class="layui-card-body">
 			<blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
 		</div>
 		{/notempty}
+
+		{$extra_html_page_tips_bottom|raw|default=''}
+
 		<!-- 标题 -->
 		{notempty name="form_title"}
 		<div class="layui-card-header">{$form_title}</div>
 		{/notempty}
         <div class="layui-card-body" style="padding: 15px;">
-        <form class="layui-form" action="" lay-filter="form">
-        	{volist name="form_items" id="vo" empty="什么都没有"}
-	        	{switch name="vo.item"}
-	        		{case input}
-	        			{include file="form/items/input"}
-	        		{/case}
-	        		{case select}
-	        			{include file="form/items/select"}
-	        		{/case}
-	        		{case select2}
-	        			{include file="form/items/select2"}
-	        		{/case}
-	        		{case switch}
-	        			{include file="form/items/switch"}
-	        		{/case}
-	        		{case icon}
-	        			{include file="form/items/icon"}
-	        		{/case}
-	        		{case upload_image}
-	        			{include file="form/items/upload_image"}
-	        		{/case}
-	        		{case radio}
-	        			{include file="form/items/radio"}
-	        		{/case}
-	        		{case textarea}
-	        			{include file="form/items/textarea"}
-	        		{/case}
-	        		{case layedit}
-	        			{include file="form/items/layedit"}
-	        		{/case}
-	        		{case tinymce}
-	        			{include file="form/items/tinymce"}
-	        		{/case}
-	        	{/switch}
-        	{/volist}
+			{$extra_html_form_top|raw|default=''}
+			<form class="layui-form" action="" lay-filter="form">
+				{volist name="form_items" id="vo" empty="什么都没有"}
+					{switch name="vo.item"}
+						{case input}
+							{include file="form/items/input"}
+						{/case}
+						{case select}
+							{include file="form/items/select"}
+						{/case}
+						{case select2}
+							{include file="form/items/select2"}
+						{/case}
+						{case switch}
+							{include file="form/items/switch"}
+						{/case}
+						{case icon}
+							{include file="form/items/icon"}
+						{/case}
+						{case upload_image}
+							{include file="form/items/upload_image"}
+						{/case}
+						{case radio}
+							{include file="form/items/radio"}
+						{/case}
+						{case textarea}
+							{include file="form/items/textarea"}
+						{/case}
+						{case layedit}
+							{include file="form/items/layedit"}
+						{/case}
+						{case tinymce}
+							{include file="form/items/tinymce"}
+						{/case}
+					{/switch}
+				{/volist}
 
 
-         	<div class="layui-form-item layui-layout-admin">
-	            <div class="layui-input-block">
-	              <div class="layui-footer" style="left: 0;">
-	              	<input type="hidden" name="id" value="{$info.id|default=''}">
-	                <button class="layui-btn layuiadmin-btn-admin" lay-submit="" lay-filter="form">立即提交</button>
-	                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-	              </div>
-	            </div>
-	        </div>
+				<div class="layui-form-item layui-layout-admin">
+					<div class="layui-input-block">
+					  <div class="layui-footer" style="left: 0;">
+						<input type="hidden" name="id" value="{$info.id|default=''}">
+						<button class="layui-btn layuiadmin-btn-admin" lay-submit="" lay-filter="form">立即提交</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					  </div>
+					</div>
+				</div>
 
-        </form>
+			</form>
+			{$extra_html_form_bottom|raw|default=''}
       </div>
+		{$extra_html_block_bottom|raw|default=''}
     </div>
 </div>
 

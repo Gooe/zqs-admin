@@ -6,9 +6,10 @@ use think\facade\Request;
 trait Curd
 {
     
-    
     /**
      * 获取过滤条件
+     * @param string $searchField title|name...
+     * @return array
      */
     public function getMap($searchField='')
     {

@@ -11,29 +11,25 @@ class Table extends Builder
      */
     private $tpl = '';
     /**
-     * @var array 模板参数变量
+     * @var array 私有模板参数变量
      */
-    protected $vars = [
-        'data_url'          => '',//数据url
-        'page_title'        => '',//页面标题
-        'page_tips'         => '',//页面提示
+    protected $_vars = [
         'cols'              => [],//表格数据
         'search'            => [],//搜索表单
         'top_btns'          => [],//顶部按钮
-        'page'             => [
+        'page'              => [
             'open' => 'true',
             'limit' => 15,//每页条数
             'limits' => '[10,15,20,50,100,200]'//每页条数的选择项
         ],//分页相关
         'height'            => 'full-100',//高度
-        'js_list'           => [],// js文件列表
-        'css_list'          => [],// css列表
-        'tab_nav'           => [],//选项卡
+        'layui_modules'     => ['index','table'],//所使用的模块
+        'toolbar_param'     => [],
     ];
     /**
      * 单元格类型
      */
-    private $row_type = ['status','switch','icon','image'];
+    private $row_type = ['status','switch','icon','image','url'];
     /**
      * 右侧按钮
      */
@@ -45,19 +41,18 @@ class Table extends Builder
     public function __construct()
     {
         $this->tpl = 'table/table';
+        $this->vars = array_merge($this->vars,$this->_vars);
     }
-    
-    /**
-     * 设置数据url
-     */
-    public function setDataUrl($url)
-    {
-        $this->vars['data_url'] = $url;
-        return $this;
-    }
-    
+
     /**
      * 设置分页选项
+     * [
+        'open' => 'true',
+        'limit' => 15,//每页条数
+        'limits' => '[10,15,20,50,100,200]'//每页条数的选择项
+        ]
+     * @param $page
+     * @return $this
      */
     public function setPage($page)
     {
@@ -65,18 +60,28 @@ class Table extends Builder
         $this->setVars('page', $page);
         return $this;
     }
-    
+
     /**
      * 设置表格高度
+     * @param $h
+     * @return $this
      */
     public function setHeight($h)
     {
         $this->setVars('height', $h);
         return $this;
     }
-    
+
+
+
     /**
      * 添加一列
+     * @param $field
+     * @param $title
+     * @param string $type 单元格类型
+     * @param array $param 特殊的参数，例type=status时的参数 ['否','是:blue']
+     * @param array $extra layui单元格其它参数
+     * @return $this
      */
     public function addColumn($field,$title,$type='',$param=[],$extra=[])
     {
@@ -113,6 +118,10 @@ TPL;
                     break;
                 case 'image';//图片
                     $column['templet'] = 'function(d){return \'<img src=" \'+d.'.$field.'+ \'" onclick="layer.open({type:1,title:false,colseBtn:0,area: [\\\'auto\\\'],shadeClose:true,content:\\\'<img style=max-height:500px src=\\\'+this.src+\\\' >\\\'})"  style="max-height:100%;" >\'}';
+                    break;
+                case 'url';
+                    $column['templet'] = '<div><a href="'.$param['url'].'" target="_blank" style="color:#01AAED;" >{{d.'.$field.'}}</a></div>';
+                    break;
             }
         }else {
             $column['type'] = $type?:'normal';
@@ -135,8 +144,12 @@ TPL;
         return $this;
     }
     
+
     /**
      * 添加toolbar 按钮
+     * @param string $type delete|edit|other
+     * @param array $attribute
+     * @return $this
      */
     public function addRightBtn($type='',$attribute = [])
     {
@@ -215,6 +228,7 @@ TPL;
     
     /**
      * 解析toolbar
+     * @todo 宽度问题
      */
     public function toolParse()
     {
@@ -233,7 +247,10 @@ TPL;
                 $html .= "<a class=\"layui-btn layui-btn-xs {$btn['class']}\" lay-event=\"{$btn['event']}\" data-url=\"{$url}\" data-method=\"{$method}\" data-h=\"{$h}\" data-w=\"{$w}\" >{$btn['title']}</a>";
             }
             $html .= '</div></div>';
-            $this->addColumn('', '操作','','',['toolbar'=>$html,'fixed'=>'right','align'=>'center']);
+            $extra_param = ['toolbar'=>$html,'fixed'=>'right','align'=>'center'];
+            
+            $extra_param = array_merge($extra_param,$this->vars['toolbar_param']);
+            $this->addColumn('', '操作','','',$extra_param);
         }
     }
     
@@ -243,7 +260,6 @@ TPL;
      * @param string $field 搜索的字段
      * @param string $type input类型时有效为 <input type="$type" />
      * @param string $item  input/select..
-     * @param string $placeholder 
      * @param array $extra $item=select时的选择项
      * @return \zqs\admin\builder\table\Table
      */
@@ -276,9 +292,12 @@ TPL;
         }
         return $this;
     }
-    
+
     /**
      * 添加头部按钮
+     * @param string $type 内置按钮 add/delete
+     * @param array $attribute 自定义按钮
+     * @return $this
      */
     public function addTopBtn($type='',$attribute = [])
     {
@@ -351,30 +370,15 @@ TPL;
         }
         return $this;
     }
-    /**
-     * 设置Tab按钮列表
-     * @param array $tab_list Tab列表 如：['tab1' => ['title' => '标题', 'url' => 'http://www.baidu.com']]
-     * @param string $curr_tab 当前tab名
-     * @return $this
-     */
-    public function addTabNav($tab_list = [], $curr_tab = '')
-    {
-        if (!empty($tab_list)) {
-            $this->vars['tab_nav'] = [
-                'tab_list' => $tab_list,
-                'curr_tab' => $curr_tab,
-            ];
-        }
-        return $this;
-    }
+
     
     /**
      * end
      */
     public function end()
     {
-       
-       $this->toolParse();
+        //解析工具栏
+        $this->toolParse();
     }
     
     /**

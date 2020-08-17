@@ -15,7 +15,7 @@
 {block name="body"}
   <div class="layui-fluid">
     <div class="layui-card">
-
+      {$extra_html_block_top|raw|default=''}
       <!-- 选项卡 -->
       {notempty name="tab_nav"}
       <div class="layui-card-body" style="padding-left: 0;">
@@ -31,28 +31,33 @@
       </div>
       {/notempty}
 
+      {$extra_html_page_tips_top|raw|default=''}
+
       <!-- 提醒文字 -->
       {notempty name="page_tips"}
       <div class="layui-card-body">
         <blockquote class="layui-elem-quote layui-quote-nm" style="margin:0;">{$page_tips}</blockquote>
       </div>
       {/notempty}
-      
-      
+
+      {$extra_html_page_tips_bottom|raw|default=''}
       
       <div class="layui-card-body">
         <div class="layui-row">
-          <div class="layui-col-md4">
+          <div class="layui-col-md{$top_btn_width|default='4'}">
+
             <!-- 顶部按钮 -->
             {notempty name="top_btns"}
             <div style="padding-bottom: 10px;">
               {volist name="top_btns" id="vo"}
-              <button class="layui-btn topbtn {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" >{$vo.title}</button>
+              <button class="layui-btn topbtn {$vo.class|default=''}" data-method="{$vo.method|default=''}" data-url="{$vo.url|default=''}" data-h="{$vo.h|default='80%'}" data-w="{$vo.w|default='50%'}" ><!--{notempty name="vo.icon"} <i class="layui-icon {$vo.icon}"></i>{/notempty}-->{$vo.title}</button>
               {/volist}
             </div>
             {/notempty}
           </div>
-          <div class="layui-col-md8">
+
+          <div class="layui-col-md{:intval(12-($top_btn_width??4))}">
+
             <!-- 搜索区域 -->
             {notempty name="search"}
             <div class="layui-form" style="text-align: right">
@@ -87,15 +92,21 @@
               </div>
             </div>
             {/notempty}
-          </div>
-        </div>
-        
-        <table id="LAY-zqs-admin-table" lay-filter="LAY-zqs-admin-table"></table>  
 
+          </div>
+
+
+        </div>
+        {$extra_html_table_top|raw|default=''}
+        <table id="LAY-zqs-admin-table" lay-filter="LAY-zqs-admin-table"></table>
+        {$extra_html_table_bottom|raw|default=''}
       </div>
 
+      {$extra_html_block_bottom|raw|default=''}
     </div>
+
   </div>
+
 {/block}
 {block name="script"}
 <!-- 其它js -->
@@ -107,7 +118,7 @@
 <script type="text/javascript">
   layui.extend({
     index: 'lib/index' //主入口模块
-  }).use(['index','table'], function(){
+  }).use({:json_encode($layui_modules)}, function(){
     var $ = layui.$
     ,form = layui.form
     ,table = layui.table
@@ -159,7 +170,7 @@
       });
     });
 
-    //监听工具条
+    //监听工具条--即右侧按钮
     table.on('tool(LAY-zqs-admin-table)', function(obj){
       var data = obj.data;
       var url = $(this).data('url');
@@ -212,11 +223,12 @@
           });
         }
         
-      }else if(obj.event === 'edit'){
+      }else if(obj.event === 'edit'||obj.event === 'iframe'){
         var tr = $(obj.tr);
         admin.popup({
           type: 2
-          ,title: '编辑'
+          ,title: $(this).text()
+          ,shadeClose:false
           ,content: url+'?id='+data.id
           ,area: [$(this).data('w'), $(this).data('h')]
           
@@ -232,7 +244,7 @@
         var checkStatus = table.checkStatus('LAY-zqs-admin-table')
         ,checkData = checkStatus.data; //得到选中的数据
         //console.log(checkData)
-        if(checkData.length === 0){
+        if(checkData.length === 0 && !$(this).hasClass('no_need_check')){
           return layer.msg('请选择数据');
         }
         var ids = [];
@@ -280,6 +292,7 @@
       }else if($(this).hasClass('iframe')){
         admin.popup({
           type: 2
+          ,shadeClose:false
           ,title: $(this).text()
           ,content: url
           ,area: [$(this).data('w'), $(this).data('h')]
@@ -288,6 +301,15 @@
       }
 
     });
+
+    //modules js
+    {notempty name="layui_modules_js"}
+    {volist name="layui_modules_js" id="vo"}
+    {$vo.content|raw}
+    {/volist}
+    {/notempty}
+
+
 
   });
   </script>
